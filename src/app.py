@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import math 
-
+np.seterr(divide='ignore', invalid='ignore')
 
 def imgToMatrix(path):
     im = cv2.imread(path)
@@ -44,6 +44,32 @@ def matrixRGBtoHSV(arr):
 
     return arr
 
+def rgb_to_hsv(rgb_matrix):
+    # Normalize the RGB values to the range [0, 1]
+    rgb_matrix = rgb_matrix / 255.0
+
+    r, g, b = rgb_matrix[:,:, 0], rgb_matrix[:,:, 1], rgb_matrix[:,:, 2]
+    cmax = np.max(rgb_matrix, axis=-1)
+    cmin = np.min(rgb_matrix, axis=-1)
+    delta = cmax - cmin
+    
+    h = np.where(np.isclose(delta,0),0,np.where(np.isclose(cmax, r), 60 * (((g - b) / delta) % 6),
+                     np.where(np.isclose(cmax, g), 60 * (((b - r) / delta) + 2),
+                              np.where(np.isclose(cmax,b) ,60*(((r-g)/delta)+4) , 0 ))))
+
+    
+    s = np.where(np.isclose(cmax, 0.0), 0.0, delta / cmax)
+
+    
+    v = cmax
+
+    
+    hsv_matrix = np.dstack((h, s, v))
+
+
+
+    return hsv_matrix
+
 def hsvToVector(arr):
     image_vector = arr.reshape(1, -1, 3)
     h = image_vector[0, :, 0]
@@ -52,13 +78,11 @@ def hsvToVector(arr):
     vector = np.concatenate([[h, v, s]], axis=0)
     return vector
 
-    
-    
-    
-    
 
 
-arr = imgToMatrix('test/948.jpg')
-arr = matrixRGBtoHSV(arr)
-arr = hsvToVector(arr)
+
+arr = imgToMatrix('test/meg.jpg')
+# arr = matrixRGBtoHSV(arr)
+arr = rgb_to_hsv(arr)
+# arr = hsvToVector(arr)
 print(arr)
