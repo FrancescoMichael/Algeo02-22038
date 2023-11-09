@@ -60,7 +60,7 @@ def cosineSimilarity(vector1,vector2):
         sum += np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i]))
     return sum/9 # return the average of cosine similarity, block 3x3
 
-def loadDataVectorData(path,dir_list):
+def loadVectorData(path,dir_list):
     arr_vectors = []
     for i in dir_list:
         arr = hsvToVector(matrixRGBtoHSV(imgToMatrix(path + i)))
@@ -72,7 +72,7 @@ def loadDataVectorData(path,dir_list):
 # testing
 img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix(r'test/948.jpg'))) # misal 948.jpg
 dir_list = os.listdir('test/')
-data = loadDataVectorData('test/',dir_list)
+data = loadVectorData('test/',dir_list)
 arr_similarity = []
 for i in range(len(data)):
     arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
