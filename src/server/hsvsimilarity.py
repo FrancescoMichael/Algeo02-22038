@@ -3,6 +3,8 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import os
+import time
+start_time = time.time()
 np.seterr(divide='ignore', invalid='ignore')
 
 def imgToMatrix(path):
@@ -40,7 +42,7 @@ def hsvToVector(arr):
         s = image_vector[0, i:(i+b), 1]
         v = image_vector[0, i:(i+b), 2]
 
-        bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
+        bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360]) # histogram with bins according to reference
         bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
         bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
         # binh = [(i*36) for i in range(11)]
@@ -52,20 +54,13 @@ def hsvToVector(arr):
         hasil.append(vector)
     return hasil
     
-
 def cosineSimilarity(vector1,vector2):
     sum = 0.0
     for i in range(9):
         sum += np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i]))
-    return sum/9
-
-
-
-
-
+    return sum/9 # return the average of cosine similarity, block 3x3
 
 def loadDataVectorData(path,dir_list):
-    
     arr_vectors = []
     for i in dir_list:
         arr = hsvToVector(matrixRGBtoHSV(imgToMatrix(path + i)))
@@ -74,20 +69,8 @@ def loadDataVectorData(path,dir_list):
         
 
 
-    
-
-# arr = imgToMatrix('test/meg.jpg') # yang dicari
-# arr = matrixRGBtoHSV(arr)
-# arr = hsvToVector(arr)
-
-
-# arr2 = imgToMatrix('test/948.jpg')
-# arr2 = matrixRGBtoHSV(arr2)
-# arr2 = hsvToVector(arr2)
-# dir_list = os.listdir('test\\')
-# print(dir_list)
-
-img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/948.jpg')))
+# testing
+img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix(r'test/948.jpg'))) # misal 948.jpg
 dir_list = os.listdir('test/')
 data = loadDataVectorData('test/',dir_list)
 arr_similarity = []
@@ -98,14 +81,5 @@ print("5 foto terdekat pertama : ")
 for i in range(5):
     print(dir_list[int(arr_similarity[i][1])])
 
-
-# print(arr)
-# print(arr2)
-
-# arr = matrixRGBtoHSV(arr)
-# arr = rgb_to_hsv(arr)
-# arr = hsvToVector(arr)
-
-
-# print(arr)
-# print(arr2)
+end_time = time.time()
+print("--- %s seconds ---" % (end_time - start_time))
