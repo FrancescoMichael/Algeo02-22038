@@ -49,8 +49,6 @@ def create_symmetric_matrix(coocurence_matrix):
     for i in range(256):
         for j in range(256):
             symmetric_matrix[i][j] /= total
-    
-    print(symmetric_matrix[205][204])
 
     return symmetric_matrix
 
@@ -79,12 +77,6 @@ def compare_images(image1, image2):
     coocurence_matrix1 = create_coocurence_matrix(greyscale_matrix1)
     coocurence_matrix2 = create_coocurence_matrix(greyscale_matrix2)
 
-    # print("Co-occurrence Matrix 1:")
-    # print(create_coocurence_matrix(greyscale_matrix1))
-
-    # print("Co-occurrence Matrix 2:")
-    # print(create_coocurence_matrix(greyscale_matrix2))
-
     symmetric_matrix1 = create_symmetric_matrix(coocurence_matrix1)
     symmetric_matrix2 = create_symmetric_matrix(coocurence_matrix2)
 
@@ -93,11 +85,6 @@ def compare_images(image1, image2):
 
     norm1 = np.linalg.norm(feature_vector1)
     norm2 = np.linalg.norm(feature_vector2)
-
-    print("Feature Vector 1:", feature_vector1)
-    print("Feature Vector 2:", feature_vector2)
-    print("Norm 1:", norm1)
-    print("Norm 2:", norm2)
 
     if norm1 == 0 or norm2 == 0:
         similarity = 0  # or handle it in a way that makes sense for your application
