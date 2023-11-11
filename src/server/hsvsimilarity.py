@@ -4,16 +4,32 @@ import math
 import matplotlib.pyplot as plt
 import os
 import time
+import multiprocessing
+
+
+
+
+
 start_time = time.time()
 np.seterr(divide='ignore', invalid='ignore')
 
+
 def imgToMatrix(path):
     im = cv2.imread(path)
+    width = im.shape[1]
+    height = im.shape[0]
+    dim = (width,height)
+    #resizing image
+    if (width != 256 or height != 256):
+        width = 256
+        height = 256
+        dim = (width,height)
+        im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA)
+
     arr = np.array(im,dtype='float')
     arr = np.flip(arr,2)
     n_horizontal, n_vertical, n_elmt = arr.shape
-
-    return arr[0 : n_horizontal - (n_horizontal%3) , 0 : n_vertical - (n_vertical%3), :] # crop photo so that it can be divided to three
+    return arr[0 : n_horizontal - (n_horizontal%4) , 0 : n_vertical - (n_vertical%4), :] # crop photo so that it can be divided to a four by four block image
 
 def matrixRGBtoHSV(rgb_matrix):
     # Normalize the RGB values to the range [0, 1]
@@ -36,29 +52,25 @@ def hsvToVector(arr):
     image_vector = arr.reshape(1, -1, 3)
     a,n,c = image_vector.shape
     hasil = []
-    b = round(n/9)
+    b = round(n/16)
     for i in range(0,n,b):
         h = image_vector[0, i:(i+b), 0]
         s = image_vector[0, i:(i+b), 1]
         v = image_vector[0, i:(i+b), 2]
 
-        bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360]) # histogram with bins according to reference
+        bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
         bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
         bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
-        # binh = [(i*36) for i in range(11)]
-        # bins = [(i*0.1) for i in range(11)]
-        # bin_h = np.histogram(h,bins=binh)
-        # bin_s = np.histogram(s,bins = bins)
-        # bin_v = np.histogram(v,bins = bins)
+
         vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
         hasil.append(vector)
     return hasil
-    
+
 def cosineSimilarity(vector1,vector2):
     sum = 0.0
-    for i in range(9):
+    for i in range(16):
         sum += np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i]))
-    return sum/9 # return the average of cosine similarity, block 3x3
+    return sum/16 # return the average of cosine similarity, block 3x3
 
 def loadVectorData(path,dir_list):
     arr_vectors = []
@@ -66,20 +78,41 @@ def loadVectorData(path,dir_list):
         arr = hsvToVector(matrixRGBtoHSV(imgToMatrix(path + i)))
         arr_vectors.append(arr)
     return arr_vectors
-        
+
+def distance1(vector1,vector2):
+    sum = 0.0
+    for i in range(16):
+
+        h1_ = np.average(vector1[i])
+        h2_ = np.average(vector2[i])
+
+        # calculate score
+        hasil= 0
+        hasil = np.sum(np.sqrt(vector1[i] * vector2[i]))     
+        hasil = math.sqrt( 1 - ( 1 / math.sqrt(h1_*h2_*len(vector1[i])*len(vector1[i])) ) * hasil )
+        sum += hasil
+
+    return sum/16# return the average of cosine similarity, block 3x3
 
 
-# testing
-img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix(r'test/948.jpg'))) # misal 948.jpg
+img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/948.jpg')))
+# img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/meg.jpg')))
+# print(cosineSimilarity(img_vector,img_vector2))
 dir_list = os.listdir('test/')
 data = loadVectorData('test/',dir_list)
 arr_similarity = []
 for i in range(len(data)):
     arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
 arr_similarity.sort(key=lambda x: x[0],reverse=True)
-print("5 foto terdekat pertama : ")
-for i in range(5):
-    print(dir_list[int(arr_similarity[i][1])])
 
-end_time = time.time()
-print("--- %s seconds ---" % (end_time - start_time))
+i = 0
+print("gambar di atas 60 percent : ")
+while (arr_similarity[i][0]*100 > 60):
+    percent = arr_similarity[i][0]*100
+    print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
+    i += 1
+print(f"total = {i} gambar di atas 60 percent")
+
+# # # print(distance1(img_vector,img_vector2))
+# # # print(cosineSimilarity(img_vector,img_vector2))
+
