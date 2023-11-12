@@ -1,12 +1,24 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import '../index.css'
 import SumberDataset from '../components/Layouts/SumberDataset';
 import SumberTest from '../components/Layouts/SumberTest';
+import ResultSection from '../components/Layouts/ResultSection';
 
 function Proses(){
     useEffect(() => {
         document.title = 'Ini judul';
     }, []);
+
+    const answer = [
+        {
+            percentage : "80%",
+            image : "/images/0.jpg",
+        },
+        {
+            percentage : "75%",
+            image : "/images/1.jpg",
+        }
+    ]
 
     return (
         <Fragment>
@@ -19,12 +31,7 @@ function Proses(){
                     <SumberDataset />
                 </div>
                 <div className = ''>
-                    <div>
-                        Ini hasil
-                    </div>
-                    <div>
-
-                    </div>
+                    <ResultSection />
                 </div>
             </div>
         </Fragment>

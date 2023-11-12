@@ -131,5 +131,20 @@ def distance1(vector1,vector2):
 #     ob_arr.append(hsvob)
 # jsonStr = json_string = json.dumps([ob.__dict__ for ob in ob_arr])
 # print(jsonStr)
+# i = 0
+# # print("gambar di atas 60 percent : ")
+# while (arr_similarity[i][0]*100 > 60):
+#     percent = arr_similarity[i][0]*100
+#     # print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
+#     i += 1
+# # print(f"total = {i} gambar di atas 60 percent")
+# arr_similarity = arr_similarity[0:5]
+# ob_arr = []
+# for ob in arr_similarity:
+#     percentobj = "" +str(round(ob[0]*100,2)) +"%"
+#     hsvob = Hsvobj(percentobj,dir_list[ob[1]])
+#     ob_arr.append(hsvob)
+# jsonStr = json_string = json.dumps([ob.__dict__ for ob in ob_arr])
+# print(jsonStr)
 
 
