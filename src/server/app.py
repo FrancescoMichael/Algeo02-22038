@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 @app.route('/data')
 def compare_image():
-    l = os.listdir('../imgUpload/')
-    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('../imgUpload/'+l[0])))
+    l = os.listdir('./imgUpload/')
+    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('./imgUpload/'+l[0])))
     dir_list = os.listdir('../../test/')
     data = loadVectorData('../../test/',dir_list)
     arr_similarity = []
