@@ -7,7 +7,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+import time
 
+start_time = time.time()
 def get_image_online(web_driver,url):
     web_driver.get(url) # get url
     all_images = web_driver.find_elements(By.TAG_NAME,"img") # find all with tag img
@@ -51,7 +53,7 @@ for url in list_of_urls:
         download_image(url,"test"+str(names)+".png")
     names += 1
 
+endtime = time.time()
+length = endtime - start_time
+print("Time : "+str(length) +" sec")
 wd.quit()
-
-
-
