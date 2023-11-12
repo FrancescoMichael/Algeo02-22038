@@ -1,3 +1,4 @@
+
 import cv2
 import numpy as np
 import math
@@ -5,8 +6,11 @@ import matplotlib.pyplot as plt
 import os
 import time
 import multiprocessing
-
-
+import json
+class Hsvobj:
+    def __init__(self,percentage,name_path):
+        self.percentage = percentage
+        self.name_path = name_path
 
 
 
@@ -95,24 +99,31 @@ def distance1(vector1,vector2):
     return sum/16# return the average of cosine similarity, block 3x3
 
 
-img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/948.jpg')))
-# img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/meg.jpg')))
-# print(cosineSimilarity(img_vector,img_vector2))
-dir_list = os.listdir('test/')
-data = loadVectorData('test/',dir_list)
-arr_similarity = []
-for i in range(len(data)):
-    arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
-arr_similarity.sort(key=lambda x: x[0],reverse=True)
 
-i = 0
-print("gambar di atas 60 percent : ")
-while (arr_similarity[i][0]*100 > 60):
-    percent = arr_similarity[i][0]*100
-    print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
-    i += 1
-print(f"total = {i} gambar di atas 60 percent")
+# l = os.listdir('imgUpload/')
+# print(l)
+# img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('imgUpload/'+l[0])))
+# dir_list = os.listdir('../../test/')
+# data = loadVectorData('../../test/',dir_list)
+# arr_similarity = []
+# for i in range(len(data)):
+#     arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
+# arr_similarity.sort(key=lambda x: x[0],reverse=True)
 
-# # # print(distance1(img_vector,img_vector2))
-# # # print(cosineSimilarity(img_vector,img_vector2))
+# i = 0
+# # print("gambar di atas 60 percent : ")
+# while (arr_similarity[i][0]*100 > 60):
+#     percent = arr_similarity[i][0]*100
+#     # print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
+#     i += 1
+# # print(f"total = {i} gambar di atas 60 percent")
+# arr_similarity = arr_similarity[0:5]
+# ob_arr = []
+# for ob in arr_similarity:
+#     percentobj = "" +str(round(ob[0]*100,2)) +"%"
+#     hsvob = Hsvobj(percentobj,dir_list[ob[1]])
+#     ob_arr.append(hsvob)
+# jsonStr = json_string = json.dumps([ob.__dict__ for ob in ob_arr])
+# print(jsonStr)
+
 
