@@ -29,7 +29,7 @@ def imgToMatrix(path):
         width = 256
         height = 256
         dim = (width,height)
-        im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA)
+        im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA) # resizing tidak mempengaruhi akurasi
 
     arr = np.array(im,dtype='float')
     arr = np.flip(arr,2)
@@ -97,7 +97,7 @@ def distance1(vector1,vector2):
         hasil = math.sqrt( 1 - ( 1 / math.sqrt(h1_*h2_*len(vector1[i])*len(vector1[i])) ) * hasil )
         sum += hasil
 
-    return sum/16# return the average of cosine similarity, block 3x3
+    return sum/16# return the average of cosine similarity, block 4x4
 
 
 
