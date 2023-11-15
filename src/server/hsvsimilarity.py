@@ -17,12 +17,23 @@ def imgToMatrix(path):
     width = im.shape[1]
     height = im.shape[0]
     dim = (width,height)
+
     #resizing image
-    if (width != 256 or height != 256):
+    if ((width != 256 or height != 256) and (width >= 256) and (height >= 256)):
         width = 256
         height = 256
         dim = (width,height)
-        im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA) # resizing tidak mempengaruhi akurasi
+         # resizing tidak mempengaruhi akurasi
+    elif (width < 256 and height < 256 and width >= 128 and height >= 128):
+        width = 128
+        height = 128
+        dim = (width,height)
+    elif (width < 128 and height < 128 and width >= 64 and height >= 64):
+        width = 64
+        height = 64
+        dim = (width,height)
+
+    im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA)
 
     arr = np.array(im,dtype='float')
     arr = np.flip(arr,2)
@@ -47,24 +58,24 @@ def matrixRGBtoHSV(rgb_matrix):
     return hsv_matrix
 
 def hsvToVector(arr):
-    # # Version 1
-    # image_vector = arr.reshape(1, -1, 3)
-    # a,n,c = image_vector.shape
-    # hasil = []
-    # b = round(n/16)
-    # for i in range(0,n,b):
-    #     h = image_vector[0, i:(i+b), 0]
-    #     s = image_vector[0, i:(i+b), 1]
-    #     v = image_vector[0, i:(i+b), 2]
+    # Version 1
+    image_vector = arr.reshape(1, -1, 3)
+    a,n,c = image_vector.shape
+    hasil = []
+    b = round(n/16)
+    for i in range(0,n,b):
+        h = image_vector[0, i:(i+b), 0]
+        s = image_vector[0, i:(i+b), 1]
+        v = image_vector[0, i:(i+b), 2]
 
-    #     bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
-    #     bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
-    #     bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
+        bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
+        bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
+        bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
 
-    #     vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
-    #     vector = vector.reshape(-1)
-    #     hasil.append(vector)
-    # return hasil
+        vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
+        vector = vector.reshape(-1)
+        hasil.append(vector)
+    return hasil
 
     # #version 2
     # b,k,elmt = arr.shape
@@ -105,10 +116,13 @@ def hsvToVector(arr):
     return hasil
 def cosineSimilarity(vector1,vector2):
     k = []
+    sum = 0
     for i in range(16):
         k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+        sum += (np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+    print(k)
     
-    return np.average(k) # return the average of cosine similarity, block 4x4
+    return sum/16 # return the average of cosine similarity, block 4x4
 
 def loadVectorData(path,dir_list):
     arr_vectors = []
@@ -136,7 +150,7 @@ def distance1(vector1,vector2):
 
 
 def split_to_16_parts(image):
-    sub_shape = (64,64,3)
+    sub_shape = (int(image.shape[0]/4),int(image.shape[1]/4),3)
 
     #divide the matrix into sub_matrices of subshape
     view_shape = tuple(np.subtract(image.shape, sub_shape) + 1) + sub_shape
@@ -167,6 +181,4 @@ print(cosineSimilarity(img_vector2,img_vector))
 #     i += 1
 # print(f"total = {i} gambar di atas 60 percent")
 
-# # # # print(distance1(img_vector,img_vector2))
-# # # # print(cosineSimilarity(img_vector,img_vector2))
 
