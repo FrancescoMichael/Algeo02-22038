@@ -1,3 +1,4 @@
+
 import cv2
 import numpy as np
 import math
@@ -5,10 +6,7 @@ import matplotlib.pyplot as plt
 import os
 import time
 import multiprocessing
-
-
-
-
+import json
 
 start_time = time.time()
 np.seterr(divide='ignore', invalid='ignore')
@@ -24,7 +22,7 @@ def imgToMatrix(path):
         width = 256
         height = 256
         dim = (width,height)
-        im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA)
+        im = cv2.resize(im,dim,interpolation = cv2.INTER_AREA) # resizing tidak mempengaruhi akurasi
 
     arr = np.array(im,dtype='float')
     arr = np.flip(arr,2)
@@ -49,6 +47,7 @@ def matrixRGBtoHSV(rgb_matrix):
     return hsv_matrix
 
 def hsvToVector(arr):
+    # # Version 1
     # image_vector = arr.reshape(1, -1, 3)
     # a,n,c = image_vector.shape
     # hasil = []
@@ -67,14 +66,32 @@ def hsvToVector(arr):
     #     hasil.append(vector)
     # return hasil
 
-    #version 2
-    b,k,elmt = arr.shape
-    baris = int(b/4)
-    kolom = int(k/4)
+    # #version 2
+    # b,k,elmt = arr.shape
+    # baris = int(b/4)
+    # kolom = int(k/4)
+    # hasil = []
+    # for i in range(0,b,baris):
+    #     for j in range(0,k,kolom):
+    #         temp = arr[i : (i+baris) , j : (j+kolom),0:3]
+    #         temp = temp.reshape(1,-1,3)
+    #         h = temp[0,:,0]
+    #         s = temp[0,:,1]
+    #         v = temp[0,:,2]
+    #         bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
+    #         bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
+    #         bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
+    #         vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
+    #         vector = vector.reshape(-1)
+    #         hasil.append(vector)
+    # return hasil
+
+    # version 3
     hasil = []
-    for i in range(0,b,baris):
-        for j in range(0,k,kolom):
-            temp = arr[i : (i+baris) , j : (j+kolom),0:3]
+    arr = split_to_16_parts(arr)
+    for i in range(4):
+        for k in range(4):
+            temp = arr[i][k]
             temp = temp.reshape(1,-1,3)
             h = temp[0,:,0]
             s = temp[0,:,1]
@@ -85,12 +102,12 @@ def hsvToVector(arr):
             vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
             vector = vector.reshape(-1)
             hasil.append(vector)
-    # print(hasil)
     return hasil
 def cosineSimilarity(vector1,vector2):
     k = []
     for i in range(16):
         k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+    
     return np.average(k) # return the average of cosine similarity, block 4x4
 
 def loadVectorData(path,dir_list):
@@ -118,24 +135,37 @@ def distance1(vector1,vector2):
     return sum/16# return the average of cosine similarity, block 3x3
 
 
+def split_to_16_parts(image):
+    sub_shape = (64,64,3)
+
+    #divide the matrix into sub_matrices of subshape
+    view_shape = tuple(np.subtract(image.shape, sub_shape) + 1) + sub_shape
+    strides = image.strides + image.strides
+    sub_matrices = np.squeeze(np.lib.stride_tricks.as_strided(image,view_shape,strides)[::sub_shape[0],::sub_shape[1],:])
+    return sub_matrices
+
 img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/948.jpg')))
-# img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/436.jpg')))
-# print(cosineSimilarity(img_vector2,img_vector))
+img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/354.jpg')))
 
-dir_list = os.listdir('../../test/')
-data = loadVectorData('../../test/',dir_list)
-arr_similarity = []
-for i in range(len(data)):
-    arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
-arr_similarity.sort(key=lambda x: x[0],reverse=True)
 
-i = 0
-print("gambar di atas 60 percent : ")
-while (arr_similarity[i][0]*100 > 60):
-    percent = arr_similarity[i][0]*100
-    print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
-    i += 1
-print(f"total = {i} gambar di atas 60 percent")
+print(cosineSimilarity(img_vector2,img_vector))
+
+
+# # print(cosineSimilarity(img_vector,img_vector2))
+# dir_list = os.listdir('../../test/')
+# data = loadVectorData('../../test/',dir_list)
+# arr_similarity = []
+# for i in range(len(data)):
+#     arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
+# arr_similarity.sort(key=lambda x: x[0],reverse=True)
+
+# i = 0
+# print("gambar di atas 60 percent : ")
+# while (arr_similarity[i][0]*100 > 60):
+#     percent = arr_similarity[i][0]*100
+#     print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
+#     i += 1
+# print(f"total = {i} gambar di atas 60 percent")
 
 # # # # print(distance1(img_vector,img_vector2))
 # # # # print(cosineSimilarity(img_vector,img_vector2))
