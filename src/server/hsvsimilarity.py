@@ -49,34 +49,57 @@ def matrixRGBtoHSV(rgb_matrix):
     return hsv_matrix
 
 def hsvToVector(arr):
-    image_vector = arr.reshape(1, -1, 3)
-    a,n,c = image_vector.shape
+    # image_vector = arr.reshape(1, -1, 3)
+    # a,n,c = image_vector.shape
+    # hasil = []
+    # b = round(n/16)
+    # for i in range(0,n,b):
+    #     h = image_vector[0, i:(i+b), 0]
+    #     s = image_vector[0, i:(i+b), 1]
+    #     v = image_vector[0, i:(i+b), 2]
+
+    #     bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
+    #     bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
+    #     bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
+
+    #     vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
+    #     vector = vector.reshape(-1)
+    #     hasil.append(vector)
+    # return hasil
+
+    #version 2
+    b,k,elmt = arr.shape
+    baris = int(b/4)
+    kolom = int(k/4)
     hasil = []
-    b = round(n/16)
-    for i in range(0,n,b):
-        h = image_vector[0, i:(i+b), 0]
-        s = image_vector[0, i:(i+b), 1]
-        v = image_vector[0, i:(i+b), 2]
-
-        bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
-        bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
-        bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
-
-        vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
-        hasil.append(vector)
+    for i in range(0,b,baris):
+        for j in range(0,k,kolom):
+            temp = arr[i : (i+baris) , j : (j+kolom),0:3]
+            temp = temp.reshape(1,-1,3)
+            h = temp[0,:,0]
+            s = temp[0,:,1]
+            v = temp[0,:,2]
+            bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
+            bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
+            bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
+            vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
+            vector = vector.reshape(-1)
+            hasil.append(vector)
+    # print(hasil)
     return hasil
-
 def cosineSimilarity(vector1,vector2):
-    sum = 0.0
+    k = []
     for i in range(16):
-        sum += np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i]))
-    return sum/16 # return the average of cosine similarity, block 3x3
+        k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+    return np.average(k) # return the average of cosine similarity, block 4x4
 
 def loadVectorData(path,dir_list):
     arr_vectors = []
+    list_extension = ['jpg','jpeg','png']
     for i in dir_list:
-        arr = hsvToVector(matrixRGBtoHSV(imgToMatrix(path + i)))
-        arr_vectors.append(arr)
+        if (i[len(i)-3:] in list_extension):
+            arr = hsvToVector(matrixRGBtoHSV(imgToMatrix(path + i)))
+            arr_vectors.append(arr)
     return arr_vectors
 
 def distance1(vector1,vector2):
@@ -95,11 +118,12 @@ def distance1(vector1,vector2):
     return sum/16# return the average of cosine similarity, block 3x3
 
 
-img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/948.jpg')))
-# img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('test/meg.jpg')))
-# print(cosineSimilarity(img_vector,img_vector2))
-dir_list = os.listdir('test/')
-data = loadVectorData('test/',dir_list)
+img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/948.jpg')))
+# img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/436.jpg')))
+# print(cosineSimilarity(img_vector2,img_vector))
+
+dir_list = os.listdir('../../test/')
+data = loadVectorData('../../test/',dir_list)
 arr_similarity = []
 for i in range(len(data)):
     arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
@@ -113,6 +137,6 @@ while (arr_similarity[i][0]*100 > 60):
     i += 1
 print(f"total = {i} gambar di atas 60 percent")
 
-# # # print(distance1(img_vector,img_vector2))
-# # # print(cosineSimilarity(img_vector,img_vector2))
+# # # # print(distance1(img_vector,img_vector2))
+# # # # print(cosineSimilarity(img_vector,img_vector2))
 
