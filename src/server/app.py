@@ -5,12 +5,31 @@ np.seterr(divide='ignore', invalid='ignore')
 
 app = Flask(__name__)
 
-@app.route('/data')
-def compare_image():
+@app.route('/load_data')
+def load_data():
     l = os.listdir('./imgUpload/')
     img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('./imgUpload/'+l[0])))
     dir_list = os.listdir('../../test/')
-    data = loadVectorData('../../test/',dir_list)
+    datas = loadVectorData('../../test/',dir_list)
+
+    dictData = []
+    for i in range(len(datas)):
+        dictData.append({"Path" : dir_list[i],"vector":datas[i]})
+    json_object = json.dumps(dictData, indent=4)
+    with open("./data_cache/color_cache.json", "w") as outfile:
+        outfile.write(json_object)
+    return "loading_Data...."
+
+
+
+@app.route('/data')
+def compare_image():
+    l = os.listdir('./imgUpload/')
+    with open("./data_cache/color_cache.json", 'r') as openfile:
+        json_object = json.load(openfile)
+    dir_list = [obj['Path'] for obj in json_object]
+    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('./imgUpload/'+l[0])))
+    data = [obj['vector'] for obj in json_object]
     arr_similarity = []
     for i in range(len(data)):
         arr_similarity.append((cosineSimilarity(img_vector,data[i]) , i))
