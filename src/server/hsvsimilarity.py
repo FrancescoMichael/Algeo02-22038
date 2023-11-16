@@ -61,26 +61,6 @@ def matrixRGBtoHSV(rgb_matrix):
     return hsv_matrix
 
 def hsvToVector(arr):
-    # Version 1
-    # image_vector = arr.reshape(1, -1, 3)
-    # a,n,c = image_vector.shape
-    # hasil = []
-    # b = round(n/16)
-    # for i in range(0,n,b):
-    #     h = image_vector[0, i:(i+b), 0]
-    #     s = image_vector[0, i:(i+b), 1]
-    #     v = image_vector[0, i:(i+b), 2]
-
-    #     bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
-    #     bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
-    #     bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
-
-    #     vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
-    #     vector = vector.reshape(-1)
-    #     hasil.append(vector)
-    # return hasil
-
-    #version 2
     b,k,elmt = arr.shape
     baris = int(b/4)
     kolom = int(k/4)
@@ -99,33 +79,6 @@ def hsvToVector(arr):
             vector = vector.reshape(-1)
             hasil.append(vector.tolist())
     return hasil
-
-    # # version 3
-    # hasil = []
-    # image = arr
-    # sub_shape = (int(image.shape[0]/4),int(image.shape[1]/4),3)
-
-    # #divide the matrix into sub_matrices of subshape
-    # view_shape = tuple(np.subtract(image.shape, sub_shape) + 1) + sub_shape
-    # strides = image.strides + image.strides
-    # sub_matrices = np.squeeze(np.lib.stride_tricks.as_strided(image,view_shape,strides)[::sub_shape[0],::sub_shape[1],:])
-    # arr = sub_matrices
-    # for i in range(4):
-    #     for k in range(4):
-    #         temp = arr[i][k]
-    #         temp = temp.reshape(1,-1,3)
-    #         h = temp[0,:,0]
-    #         s = temp[0,:,1]
-    #         v = temp[0,:,2]
-    #         bin_h = np.histogram(h,bins=[0,26,41,121,191,271,296,316,360])
-    #         bin_s = np.histogram(s,bins = [0,0.2,0.7,1])
-    #         bin_v = np.histogram(v,bins = [0,0.2,0.7,1])
-    #         vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
-    #         vector = vector.reshape(-1)
-    #         hasil.append(vector)
-    # return hasil
-
-
 
 def cosineSimilarity(vector1,vector2):
     k = []
@@ -181,50 +134,3 @@ def split_to_16_parts(image):
     strides = image.strides + image.strides
     sub_matrices = np.squeeze(np.lib.stride_tricks.as_strided(image,view_shape,strides)[::sub_shape[0],::sub_shape[1],:])
     return sub_matrices
-
-
-
-# if __name__ == '__main__':
-    
-    # np.seterr(divide='ignore', invalid='ignore')
-    # start_time = time.time()
-    # img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/948.jpg')))
-    # # img_vector2 = hsvToVector(matrixRGBtoHSV(imgToMatrix('../../test/67.jpg')))
-    # # print(cosineSimilarity(img_vector2,img_vector))
-
-
-    # dir_list = os.listdir('../../test/')
-    # data = loadVectorData('../../test/',dir_list)
-    # arr_similarity = []
-    # process = []
-
-    # with concurrent.futures.ThreadPoolExecutor() as executor:
-    #     for i in range(len(data)):
-    #         p = executor.submit(cosineSimilarity,data[i],img_vector)
-    #         arr_similarity.append((p.result(),i))
-
-    # arr_similarity.sort(key=lambda x: x[0],reverse=True)
-    # i = 0
-    # print("gambar di atas 60 percent : ")
-    # while (arr_similarity[i][0]*100 > 60):
-    #     percent = arr_similarity[i][0]*100
-    #     print(dir_list[int(arr_similarity[i][1])] + f" percent : {percent}%")
-    #     i += 1
-    # print(f"total = {i} gambar di atas 60 percent")
-
-
-    # end_time = time.time()
-    # print("time = "+str(end_time-start_time))
-    # l = os.listdir('./imgUpload/')
-    # img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('./imgUpload/'+l[0])))
-    # dir_list = os.listdir('../../test/')
-    # datas = loadVectorData('../../test/',dir_list)
-
-    # dictData = []
-    # for i in range(len(datas)):
-    #     dictData.append({"Path" : dir_list[i],"vector":datas[i]})
-    
-    # json_object = json.dumps(dictData, indent=4)
-    # with open("sample.json", "w") as outfile:
-    #     outfile.write(json_object)
-
