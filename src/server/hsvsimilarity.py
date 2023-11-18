@@ -163,6 +163,3 @@ def split_to_16_parts(image):
     sub_matrices = np.squeeze(np.lib.stride_tricks.as_strided(image,view_shape,strides)[::sub_shape[0],::sub_shape[1],:])
     return sub_matrices
 
-
-
-
