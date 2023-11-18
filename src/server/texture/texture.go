@@ -34,13 +34,17 @@ type similarImg struct {
 	Percentage string `json:"percentage"`
 }
 
+var testPath = "../../client/public/imgUpload/"
+var datasetPath = "../../client/public/imgDataset/"
+
 func texture() []similarImg {
 	// texture() function is called when the client inputs a new set of images
 	// feature vectore of the test image
-	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir("../imgUpload", listDir("../imgUpload"))[0]))))
+	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir(testPath, listDir(testPath))[0]))))
 
-	dirList := listDir("../../../test/")
-	rgbMatrices := loadImagesFromDir("../../../test/", dirList)
+	checkIfDir(datasetPath)
+	datasetList := listDir(datasetPath)
+	rgbMatrices := loadImagesFromDir(datasetPath, datasetList)
 
 	var similarityList []tuple
 	var imagesCache []imgCache
@@ -53,7 +57,7 @@ func texture() []similarImg {
 		})
 		imagesCache = append(imagesCache, imgCache{
 			Idx:         i,
-			Image:       dirList[similarityList[i].idx],
+			Image:       datasetList[similarityList[i].idx],
 			Contrast:    feature[0],
 			Homogeneity: feature[1],
 			Entropy:     feature[2],
@@ -67,10 +71,11 @@ func texture() []similarImg {
 
 	var similarImgs = []similarImg{}
 	i := 0
-	for similarityList[i].similarity > 0.6 {
+	length = len(similarityList)
+	for i < length && similarityList[i].similarity > 0.6 {
 		similarImgs = append(similarImgs, similarImg{
 			ID:         fmt.Sprint(i + 1),
-			Image:      dirList[similarityList[i].idx],
+			Image:      datasetList[similarityList[i].idx],
 			Percentage: fmt.Sprintf("%.2f", math.Floor(similarityList[i].similarity*10000)/100) + "%",
 		})
 		i++
@@ -98,9 +103,8 @@ func texture() []similarImg {
 func textureWithCache() []similarImg {
 	// function is called when prev img dataset is used
 	// feature vectore of the test image
-	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir("../imgUpload", listDir("../imgUpload"))[0]))))
+	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir(testPath, listDir(testPath))[0]))))
 
-	fmt.Println(listDir("../imgUpload"))
 	// unmarshalling the .json cache
 	imgsCacheBytes, err := os.ReadFile("../data_cache/texture_cache.json")
 	if err != nil {
@@ -137,7 +141,8 @@ func textureWithCache() []similarImg {
 	// fmt.Println(similarityList)
 	var similarImgs = []similarImg{}
 	i := 0
-	for similarityList[i].similarity > 0.6 {
+	length = len(similarityList)
+	for i < length && similarityList[i].similarity > 0.6 {
 		similarImgs = append(similarImgs, similarImg{
 			ID:         fmt.Sprint(i + 1),
 			Image:      imgsCache[similarityList[i].idx].Image,
@@ -149,16 +154,14 @@ func textureWithCache() []similarImg {
 }
 
 func imgToRGB(filename string) [][][3]uint8 {
-	name := "../../../test/" + filename
-
-	file, err := os.Open(name)
+	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer file.Close()
 
 	var img image.Image
-	format := filepath.Ext(name)
+	format := filepath.Ext(filename)
 	switch format {
 	case ".jpg", ".jpeg":
 		img, err = jpeg.Decode(file)
@@ -343,13 +346,45 @@ func cosineSimilarity(featureVector1, featureVector2 [5]float64) float64 {
 	return result
 }
 
+func checkIfDir(path string) string {
+	dir, err := os.Open(path)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+	defer dir.Close()
+
+	fileInfos, err := dir.Readdir(-1)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	for _, fileInfo := range fileInfos {
+		if fileInfo.IsDir() {
+			// It's a directory, list files inside
+			return fileInfo.Name()
+		} else {
+			// It's a file
+			return ""
+		}
+	}
+	return ""
+}
+
 func listDir(path string) []string {
-	dir, _ := os.Open(path)
+	var dirList []string
+
+	folderName := checkIfDir(path)
+
+	var newFolderName = ""
+	if folderName != "" {
+		newFolderName = folderName + "/"
+	}
+
+	dir, _ := os.Open(filepath.Join(path, folderName))
 	fileInfos, _ := dir.Readdir(-1)
 
-	var dirList []string
 	for _, fileInfo := range fileInfos {
-		dirList = append(dirList, fileInfo.Name())
+		dirList = append(dirList, newFolderName+fileInfo.Name())
 	}
 
 	return dirList
@@ -358,7 +393,7 @@ func listDir(path string) []string {
 func loadImagesFromDir(path string, dirList []string) [][][][3]uint8 {
 	var rgbMatrices [][][][3]uint8
 	for _, x := range dirList {
-		rgbMatrices = append(rgbMatrices, imgToRGB(x))
+		rgbMatrices = append(rgbMatrices, imgToRGB(path+x))
 	}
 	return rgbMatrices
 }
