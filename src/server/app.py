@@ -2,7 +2,12 @@ from flask import Flask,request,jsonify,redirect, url_for, request
 from hsvsimilarity import*
 import json
 import time
-
+global start_time
+global time_length
+global total_result
+total_result = 0
+start_time = 0
+time_length = 0
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -10,11 +15,18 @@ app = Flask(__name__)
 
 @app.route('/load_data',methods = ['POST', 'GET'])
 def load_data():
-    start = time.time()
+    global start_time
+    start_time = time.time()
+    path_initial = './imgDataset/'
 
-    dir_list = os.listdir('../../test/') # receive path of all images
+    dir_list = os.listdir('./imgDataset/') # receive path of all images
+    # if (os.path.isdir("./imgDataset/" + dir))
+    if (os.path.isdir('./imgDataset/' + dir_list[0])):
+        path_initial = './imgDataset/' + dir_list[0]+'/'
+        dir_list = os.listdir('./imgDataset/' + dir_list[0]+'/')
+        
     
-    data_vector = loadVectorData('../../test/',dir_list) # load vectors for all image dataset
+    data_vector = loadVectorData(path_initial,dir_list) # load vectors for all image dataset
 
     dictData = [{"Path" : dir_list[i],"vector":data_vector[i]} for i in range(len(data_vector))] # load dictionary
 
@@ -24,11 +36,12 @@ def load_data():
     with open("./data_cache/color_cache.json", "w") as outfile:
         outfile.write(json_object)
     
-    return redirect(url_for('data',start_time = start))
+    return 'loading data'
 
-@app.route('/data/<int:start_time>')
-def data(start_time = 0):
+@app.route('/data')
+def data():
     global time_length
+    global start_time
     
     if (start_time == 0):
         start_time = time.time() # start time if using cache
@@ -45,10 +58,13 @@ def data(start_time = 0):
 
     # version 1    
     arr_similarity = []
+    global total_result
+    total_result = 0
     for i in range(len(data)):
         cosine_result = cosineSimilarity(img_vector,data[i])
         if (cosine_result >= 0.6):
             arr_similarity.append(( cosine_result, i))
+            total_result += 1
     arr_similarity.sort(key=lambda x: x[0],reverse=True)
 
 
@@ -70,17 +86,19 @@ def data(start_time = 0):
     end_time = time.time()
   
     time_length = end_time - start_time
+    
+    start_time = 0
     return jsonify(f),200
     
 
 @app.route('/execution_time')
 def execution():
+    result = str(total_result) + " Results in "
     if (time_length < 60):
-        execution_time = {'id':'1','execution_time':str(round(time_length,2))+" secs"}
+        execution_time = {'id':'1','execution_time':result + str(round(time_length,2))+" seconds"}
     else:
-        minutes = time_length//60
-        seconds = (time_length%60)/100
-        execution_time = {'id':'1','execution_time': int(str(minutes))+'.'+str(round(seconds,2))+" minutes"}
+        convert = time.strftime("%M.%S",time.gmtime(time_length))
+        execution_time = {'id':'1','execution_time': result + convert +" Minutes"}
 
     return execution_time   
     

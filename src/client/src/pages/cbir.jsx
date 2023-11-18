@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from "react";
 import "../index.css";
 import SumberData from "../components/Layouts/SumberData";
-import ResultSection from "../components/Layouts/ResultSection";
+import ResultSection from "./ResultSection";
 import Navbar from "../components/Fragments/Navbar";
 
 function Proses() {

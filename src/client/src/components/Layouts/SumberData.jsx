@@ -22,6 +22,9 @@ function SumberData() {
   };
 
   const handleRunAlgorithm = async () => {
+    console.log(imageToTest);
+    console.log(imageForDataset);
+    console.log(urlForDataset);
 	if (imageToTest && (imageForDataset || urlForDataset)) {
 		const formData = new FormData();
 		formData.append("imageToTest", imageToTest);
