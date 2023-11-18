@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-export const getColorData = () => {
+export const getColorData = (callback) => {
     // dataset baru
     axios
     .get("http://localhost:5000/load_data")
     .then((res) => {
         console.log(res.data)
-        // callback(res.data)
+        callback(res.data)
     })
     .catch((err) => {
         console.log(err);
@@ -29,7 +29,7 @@ export const getColorOldData = () => {
 export const getColorDataExecutionTime = () => {
     // execution time
     axios
-    .get("http://localhost:5000/execution time")
+    .get("http://localhost:5000/execution_time")
     .then((res) => {
         console.log(res.data)
         // callback(res.data)

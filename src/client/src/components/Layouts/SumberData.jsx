@@ -12,6 +12,7 @@ function SumberData() {
   const [uploadedURLName, setUploadedURLName] = useState("");
   const [showContentAcuan, setShowContentAcuan] = useState(true);
   const [showContentDataset, setShowContentDataset] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const toggleContentAcuan = () => {
     setShowContentAcuan(!showContentAcuan);
@@ -62,11 +63,11 @@ function SumberData() {
 		} catch (error) {
 			console.error("Error running algorithm:", error);
 		}
-	} else {
-		setNotification(
-			"Please upload both images before running the algorithm."
-		);
-	}
+    } else {
+      setNotification(
+        "Please upload both images before running the algorithm."
+      );
+    }
 
 	setUploadedFileName("");
 	setUploadedURLName("");
@@ -149,6 +150,8 @@ function SumberData() {
           {uploadedFileName && (
             <div className="mt-4">Uploaded File: {uploadedFileName}</div>
           )}
+      </div>
+      <div>
       </div>
     </>
   );
