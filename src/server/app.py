@@ -28,6 +28,8 @@ def load_data():
 
 @app.route('/data/<int:start_time>')
 def data(start_time = 0):
+    global time_length
+    
     if (start_time == 0):
         start_time = time.time() # start time if using cache
     
@@ -49,13 +51,6 @@ def data(start_time = 0):
             arr_similarity.append(( cosine_result, i))
     arr_similarity.sort(key=lambda x: x[0],reverse=True)
 
-    # arr_similarity = []
-    # with concurrent.futures.ThreadPoolExecutor() as executor:
-    #     for i in range(len(data)):
-    #         p = executor.submit(cosineSimilarity,data[i],img_vector)
-    #         if (p.result()*100 >= 60):
-    #             arr_similarity.append((p.result(),i))
-    # arr_similarity.sort(key=lambda x: x[0],reverse=True)
 
     ob_arr = []
     i = 1
@@ -64,9 +59,7 @@ def data(start_time = 0):
         
         ob_arr.append({"id":str(i),"percentage":percentobj , "image": dir_list[ob[1]]})
         i += 1
-    end_time = time.time()
-    global time_length
-    time_length = end_time - start_time
+    
 
     f = []
     for ob in ob_arr:
@@ -74,6 +67,9 @@ def data(start_time = 0):
         if extra:
             ob["extra"] = extra
         f.append(ob)
+    end_time = time.time()
+  
+    time_length = end_time - start_time
     return jsonify(f),200
     
 
