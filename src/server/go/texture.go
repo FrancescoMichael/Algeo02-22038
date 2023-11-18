@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/draw"
@@ -18,36 +19,56 @@ type tuple struct {
 	similarity float64
 }
 
+type imgCache struct {
+	Idx         int     `json:"idx"`
+	Image       string  `json:"image"`
+	Contrast    float64 `json:"contrast"`
+	Homogeneity float64 `json:"homogeneity"`
+	Entropy     float64 `json:"entropy"`
+	Energy      float64 `json:"energy"`
+	Correlation float64 `json:"correlation" `
+}
+
 type similarImg struct {
 	ID         string `json:"id"`
 	Image      string `json:"image"`
 	Percentage string `json:"percentage"`
 }
 
-var similarityList []tuple
-var similarImgs = []similarImg{}
-
 func texture() []similarImg {
+	// texture() function is called when the client inputs a new set of images
 	// startTime := time.Now()
 
-	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(imgToRGB("948.jpg")))))
+	// feature vectore of the test image
+	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir("../imgUpload", listDir("../imgUpload"))[0]))))
 
 	dirList := listDir("../../../test/")
 	rgbMatrices := loadImagesFromDir("../../../test/", dirList)
 
+	var similarityList []tuple
+	var imagesCache []imgCache
 	length := len(rgbMatrices)
 	for i := 0; i < length; i++ {
-		feature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(imgToRGB(dirList[i])))))
-		var temp tuple
-		temp.idx = i
-		temp.similarity = cosineSimilarity(testFeature, feature)
-		similarityList = append(similarityList, temp)
+		feature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(rgbMatrices[i]))))
+		similarityList = append(similarityList, tuple{
+			idx:        i,
+			similarity: cosineSimilarity(testFeature, feature),
+		})
+		imagesCache = append(imagesCache, imgCache{
+			Idx:         i,
+			Image:       dirList[similarityList[i].idx],
+			Contrast:    feature[0],
+			Homogeneity: feature[1],
+			Entropy:     feature[2],
+			Energy:      feature[3],
+			Correlation: feature[4]})
 	}
 
 	sort.Slice(similarityList, func(i, j int) bool {
 		return similarityList[i].similarity > similarityList[j].similarity
 	})
 
+	var similarImgs = []similarImg{}
 	i := 0
 	for similarityList[i].similarity > 0.6 {
 		similarImgs = append(similarImgs, similarImg{
@@ -58,12 +79,79 @@ func texture() []similarImg {
 		i++
 	}
 
-
 	// endTime := time.Now()
 	// elapsed := endTime.Sub(startTime)
 
+	// creating cache
+	jsonImgsCache, err := json.MarshalIndent(imagesCache, "", "    ")
+	if err != nil {
+		fmt.Println("Error marshalling JSON:", err)
+	}
+
+	file, err := os.Create("../data_cache/texture_cache.json")
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+	}
+	defer file.Close()
+
+	_, err = file.Write(jsonImgsCache)
+	if err != nil {
+		fmt.Println("Error writing files:", err)
+	}
 	return similarImgs
 	// fmt.Printf("Program execution time: %v\n", elapsed)
+}
+
+func textureWithCache() []similarImg {
+	// feature vectore of the test image
+	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir("../imgUpload", listDir("../imgUpload"))[0]))))
+
+	fmt.Println(listDir("../imgUpload"))
+	// unmarshalling the .json cache
+	imgsCacheBytes, err := os.ReadFile("../data_cache/texture_cache.json")
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+	}
+
+	var imgsCache []imgCache
+
+	err = json.Unmarshal(imgsCacheBytes, &imgsCache)
+	if err != nil {
+		fmt.Println("Error unmarshalling JSON:", err)
+	}
+
+	length := len(imgsCache)
+
+	var similarityList []tuple
+	for i := 0; i < length; i++ {
+		similarityList = append(similarityList, tuple{
+			idx: i,
+			similarity: cosineSimilarity(testFeature, [5]float64{
+				imgsCache[i].Contrast,
+				imgsCache[i].Homogeneity,
+				imgsCache[i].Entropy,
+				imgsCache[i].Energy,
+				imgsCache[i].Correlation,
+			}),
+		})
+	}
+
+	sort.Slice(similarityList, func(i, j int) bool {
+		return similarityList[i].similarity > similarityList[j].similarity
+	})
+
+	// fmt.Println(similarityList)
+	var similarImgs = []similarImg{}
+	i := 0
+	for similarityList[i].similarity > 0.6 {
+		similarImgs = append(similarImgs, similarImg{
+			ID:         fmt.Sprint(i + 1),
+			Image:      imgsCache[similarityList[i].idx].Image,
+			Percentage: fmt.Sprintf("%.2f", math.Floor(similarityList[i].similarity*10000)/100) + "%",
+		})
+		i++
+	}
+	return similarImgs
 }
 
 func imgToRGB(filename string) [][][3]uint8 {
@@ -210,7 +298,20 @@ func createFeatureVector(symmetric [256][256]float64) [5]float64 {
 	}
 
 	energy = math.Sqrt(asm)
-	return [5]float64{contrast, homogeneity, entropy, energy, correlation}
+	return [5]float64{
+		replaceNanWithZero(contrast),
+		replaceNanWithZero(homogeneity),
+		replaceNanWithZero(entropy),
+		replaceNanWithZero(energy),
+		replaceNanWithZero(correlation),
+	}
+}
+
+func replaceNanWithZero(value float64) float64 {
+	if math.IsNaN(value) {
+		return 0.
+	}
+	return value
 }
 
 func transpose(matrix [256][256]uint) [256][256]uint {
