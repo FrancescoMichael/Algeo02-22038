@@ -2,7 +2,16 @@
   "name": "client",
   "private": true,
   "version": "0.0.0",
-  "proxy" : "http://localhost:5000/",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:5000",
+      "secure": false
+    },
+    "/other-api": {
+      "target": "http://localhost:8080",
+      "secure": false
+    }
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,8 +20,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.6.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook": "^0.0.1",
+    "react-hook-form": "^7.48.2",
+    "react-paginate": "^8.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

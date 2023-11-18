@@ -7,12 +7,17 @@ import AboutUs from './pages/aboutus.jsx';
 import PenjalasanSearchEngine from './pages/search.jsx';
 import HowtoUse from './pages/howtouse.jsx';
 import Proses from './pages/cbir.jsx';
+import ResultSection from './pages/ResultSection.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Proses />,
     errorElement: <ErrorPage />
+  },
+  {
+    path : "/results",
+    element: <ResultSection />
   },
   {
     path: "/about-us",

@@ -1,9 +1,11 @@
 import axios from 'axios';
-const getData = (callback) => {
+
+export const getData = () => {
     axios
-    .get('http://localhost:3000/data')
+    .get("")
     .then((res) => {
-        callback(res.data)
+        console.log(res.data)
+        // callback(res.data)
     })
     .catch((err) => {
         console.log(err);
