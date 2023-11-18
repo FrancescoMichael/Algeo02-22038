@@ -6,12 +6,16 @@ import zipfile
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
+import shutil
+
 
 import json
 import time
 global start_time
 global time_length
 global total_result
+global path_initial
+path_initial = './imgDataset/'
 total_result = 0
 start_time = 0
 time_length = 0
@@ -41,11 +45,13 @@ def download_image_from_url(url, save_path):
 def unzip_file(zip_path, extract_path):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_path)
+    os.remove(zip_path)
 
 @app.route('/load_data',methods = ['POST', 'GET'])
 def load_data():
     global start_time
     global time_length
+    global path_initial
 
     start_time = time.time()
     path_initial = './imgDataset/'
@@ -59,7 +65,7 @@ def load_data():
     
     data_vector = loadVectorData(path_initial,dir_list) # load vectors for all image dataset
 
-    dictData = [{"Path" : dir_list[i],"vector":data_vector[i]} for i in range(len(data_vector))] # load dictionary
+    dictData = [{"Path" : path_initial + dir_list[i],"vector":data_vector[i]} for i in range(len(data_vector))] # load dictionary
 
     json_object = json.dumps(dictData, indent=4)
 
@@ -184,6 +190,12 @@ def execution():
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
+    list_dir = os.listdir("./imgDataset/")
+    for i in list_dir:
+        if (os.path.isdir("./imgDataset/" + i)):
+            shutil.rmtree("./imgDataset/" + i)
+        elif (os.path.isfile("./imgDataset/" + i)):
+            os.remove("./imgDataset/" + i)
     try:
         ensure_upload_folder(app.config['UPLOAD_TEST'])
         ensure_upload_folder(app.config['UPLOAD_DATASET'])
