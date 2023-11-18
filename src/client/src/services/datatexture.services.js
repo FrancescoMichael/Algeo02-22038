@@ -16,7 +16,7 @@ export const textureData = () => {
 export const getTextureOldData = () => {
     // dataset lama
     axios
-    .get("http://localhost:5000/imagescache")
+    .get("http://localhost:8080/imagescache")
     .then((res) => {
         console.log(res.data)
         // callback(res.data)
@@ -29,7 +29,7 @@ export const getTextureOldData = () => {
 export const getTextureDataExecutionTime = () => {
     // execution time
     axios
-    .get("http://localhost:5000/execution time")
+    .get("http://localhost:8080/executiontime")
     .then((res) => {
         console.log(res.data)
         // callback(res.data)
