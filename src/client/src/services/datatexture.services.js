@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getColorData = () => {
+export const textureData = () => {
     // dataset baru
     axios
     .get("http://localhost:8080/images")
@@ -13,7 +13,7 @@ export const getColorData = () => {
     });
 }
 
-export const getColorOldData = () => {
+export const getTextureOldData = () => {
     // dataset lama
     axios
     .get("http://localhost:5000/imagescache")
@@ -26,7 +26,7 @@ export const getColorOldData = () => {
     });
 }
 
-export const getColorDataExecutionTime = () => {
+export const getTextureDataExecutionTime = () => {
     // execution time
     axios
     .get("http://localhost:5000/execution time")
