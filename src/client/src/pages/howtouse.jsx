@@ -1,6 +1,13 @@
+import Navbar from "../components/Fragments/Navbar";
+
 function HowtoUse(){
     return (
-        <div>Ini how to use</div>
+        <>
+            {/* <Navbar /> */}
+            <div className = "bg-green-500">
+                Div1
+            </div>
+        </>
     );
 }
 

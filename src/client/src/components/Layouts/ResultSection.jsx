@@ -1,5 +1,10 @@
-function ResultSection(){
+import './ResultSection.css'
+import TampilanResults from './TampilanResults'
 
+function ResultSection(){
+    return(
+        <TampilanResults />
+    );
 }
 
-export default ResultSection;
+export default ResultSection; 

@@ -1,9 +1,11 @@
 import axios from 'axios';
-const getData = (callback) => {
+
+export const getData = () => {
     axios
-    .get('http://localhost:3000/data')
+    .get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false")
     .then((res) => {
-        callback(res.data)
+        console.log(res.data)
+        // callback(res.data)
     })
     .catch((err) => {
         console.log(err);
