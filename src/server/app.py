@@ -15,7 +15,7 @@ global start_time
 global time_length
 global total_result
 global path_initial
-path_initial = './imgDataset/'
+path_initial = ""
 total_result = 0
 start_time = 0
 time_length = 0
@@ -25,10 +25,10 @@ np.seterr(divide='ignore', invalid='ignore')
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_TEST = 'imgUpload'
+UPLOAD_TEST = '../client/public/imgUpload'
 app.config['UPLOAD_TEST'] = UPLOAD_TEST
 
-UPLOAD_DATASET = 'imgDataset'
+UPLOAD_DATASET = '../client/public/imgDataset'
 app.config['UPLOAD_DATASET'] = UPLOAD_DATASET
 
 def ensure_upload_folder(folder_path):
@@ -54,16 +54,16 @@ def load_data():
     global path_initial
 
     start_time = time.time()
-    path_initial = './imgDataset/'
+    path_initial = ""
 
-    dir_list = os.listdir('./imgDataset/') # receive path of all images
+    dir_list = os.listdir('../client/public/imgDataset/') # receive path of all images
     # if (os.path.isdir("./imgDataset/" + dir))
-    if (os.path.isdir('./imgDataset/' + dir_list[0])):
-        path_initial = './imgDataset/' + dir_list[0]+'/'
-        dir_list = os.listdir('./imgDataset/' + dir_list[0]+'/')
+    if (os.path.isdir('../client/public/imgDataset/' + dir_list[0])):
+        path_initial = dir_list[0]+'/'
+        dir_list = os.listdir('../client/public/imgDataset/' + dir_list[0]+'/')
         
     
-    data_vector = loadVectorData(path_initial,dir_list) # load vectors for all image dataset
+    data_vector = loadVectorData('../client/public/imgDataset/'+path_initial,dir_list) # load vectors for all image dataset
 
     dictData = [{"Path" : path_initial + dir_list[i],"vector":data_vector[i]} for i in range(len(data_vector))] # load dictionary
 
@@ -78,7 +78,7 @@ def load_data():
     if (start_time == 0):
         start_time = time.time() # start time if using cache
     
-    l = os.listdir('./imgUpload/')
+    l = os.listdir('../client/public/imgUpload/')
 
     with open("./data_cache/color_cache.json", 'r') as openfile:
         json_object = json.load(openfile)
@@ -86,7 +86,7 @@ def load_data():
     dir_list = [obj['Path'] for obj in json_object] # read path from cache
     data = [obj['vector'] for obj in json_object]# read
 
-    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('./imgUpload/'+l[0]))) # process ulploaded image
+    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('../client/public/imgUpload/'+l[0]))) # process ulploaded image
 
     # version 1    
     arr_similarity = []
@@ -131,7 +131,7 @@ def data():
     if (start_time == 0):
         start_time = time.time() # start time if using cache
     
-    l = os.listdir('./imgUpload/')
+    l = os.listdir('../client/public/imgUpload/')
 
     with open("./data_cache/color_cache.json", 'r') as openfile:
         json_object = json.load(openfile)
@@ -139,7 +139,7 @@ def data():
     dir_list = [obj['Path'] for obj in json_object] # read path from cache
     data = [obj['vector'] for obj in json_object]# read
 
-    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('./imgUpload/'+l[0]))) # process ulploaded image
+    img_vector = hsvToVector(matrixRGBtoHSV(imgToMatrix('../client/public/imgUpload/'+l[0]))) # process ulploaded image
 
     # version 1    
     arr_similarity = []
@@ -190,12 +190,12 @@ def execution():
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
-    list_dir = os.listdir("./imgDataset/")
+    list_dir = os.listdir("../client/public/imgDataset/")
     for i in list_dir:
-        if (os.path.isdir("./imgDataset/" + i)):
-            shutil.rmtree("./imgDataset/" + i)
-        elif (os.path.isfile("./imgDataset/" + i)):
-            os.remove("./imgDataset/" + i)
+        if (os.path.isdir("../client/public/imgDataset/" + i)):
+            shutil.rmtree("../client/public/imgDataset/" + i)
+        elif (os.path.isfile("../client/public/imgDataset/" + i)):
+            os.remove("../client/public/imgDataset/" + i)
     try:
         ensure_upload_folder(app.config['UPLOAD_TEST'])
         ensure_upload_folder(app.config['UPLOAD_DATASET'])
