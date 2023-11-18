@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	// "time"
 )
 
 type tuple struct {
@@ -37,8 +36,6 @@ type similarImg struct {
 
 func texture() []similarImg {
 	// texture() function is called when the client inputs a new set of images
-	// startTime := time.Now()
-
 	// feature vectore of the test image
 	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir("../imgUpload", listDir("../imgUpload"))[0]))))
 
@@ -79,9 +76,6 @@ func texture() []similarImg {
 		i++
 	}
 
-	// endTime := time.Now()
-	// elapsed := endTime.Sub(startTime)
-
 	// creating cache
 	jsonImgsCache, err := json.MarshalIndent(imagesCache, "", "    ")
 	if err != nil {
@@ -99,10 +93,10 @@ func texture() []similarImg {
 		fmt.Println("Error writing files:", err)
 	}
 	return similarImgs
-	// fmt.Printf("Program execution time: %v\n", elapsed)
 }
 
 func textureWithCache() []similarImg {
+	// function is called when prev img dataset is used
 	// feature vectore of the test image
 	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(loadImagesFromDir("../imgUpload", listDir("../imgUpload"))[0]))))
 
