@@ -19,8 +19,6 @@ time_length = 0
 np.seterr(divide='ignore', invalid='ignore')
 
 app = Flask(__name__)
-
-app = Flask(__name__)
 CORS(app)
 
 UPLOAD_TEST = 'imgUpload'
@@ -208,7 +206,7 @@ def upload_image():
                 if image_for_dataset.filename.endswith('.zip'):
                     dataset_folder = os.path.join(app.config['UPLOAD_DATASET'])
                     ensure_upload_folder(dataset_folder)
-                    zip_path = os.path.join(dataset_folder)
+                    zip_path = os.path.join(dataset_folder, 'dataset.zip')
                     image_for_dataset.save(zip_path)
                     unzip_file(zip_path, dataset_folder)
                 else:
