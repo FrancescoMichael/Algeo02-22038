@@ -7,7 +7,7 @@ import requests
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_TEST = 'imgUpload'
+UPLOAD_TEST = ''
 app.config['UPLOAD_TEST'] = UPLOAD_TEST
 
 UPLOAD_DATASET = 'imgDataset'
