@@ -10,28 +10,35 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"time"
+	// "time"
 )
 
-func main() {
-	startTime := time.Now()
+type tuple struct {
+	idx        int
+	similarity float64
+}
 
-	type Tuple struct {
-		idx        int
-		similarity float64
-	}
+type similarImg struct {
+	ID         string `json:"id"`
+	Image      string `json:"image"`
+	Percentage string `json:"percentage"`
+}
+
+var similarityList []tuple
+var similarImgs = []similarImg{}
+
+func texture() []similarImg {
+	// startTime := time.Now()
 
 	testFeature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(imgToRGB("948.jpg")))))
 
 	dirList := listDir("../../../test/")
 	rgbMatrices := loadImagesFromDir("../../../test/", dirList)
 
-	var similarityList []Tuple
-
 	length := len(rgbMatrices)
 	for i := 0; i < length; i++ {
 		feature := createFeatureVector(createSymmetricMatrix(createCoocurenceMatrix(rgbToGreyscale(imgToRGB(dirList[i])))))
-		var temp Tuple
+		var temp tuple
 		temp.idx = i
 		temp.similarity = cosineSimilarity(testFeature, feature)
 		similarityList = append(similarityList, temp)
@@ -41,28 +48,25 @@ func main() {
 		return similarityList[i].similarity > similarityList[j].similarity
 	})
 
-	fmt.Println("5 foto terdekat pertama:")
-	for i := 0; i < 5; i++ {
-		fmt.Println(dirList[similarityList[i].idx])
+	i := 0
+	for similarityList[i].similarity > 0.6 {
+		similarImgs = append(similarImgs, similarImg{
+			ID:         fmt.Sprint(i + 1),
+			Image:      dirList[similarityList[i].idx],
+			Percentage: fmt.Sprintf("%.2f", math.Floor(similarityList[i].similarity*10000)/100) + "%",
+		})
+		i++
 	}
 
-	endTime := time.Now()
-	elapsed := endTime.Sub(startTime)
 
-	fmt.Printf("Program execution time: %v\n", elapsed)
+	// endTime := time.Now()
+	// elapsed := endTime.Sub(startTime)
+
+	return similarImgs
+	// fmt.Printf("Program execution time: %v\n", elapsed)
 }
 
 func imgToRGB(filename string) [][][3]uint8 {
-	// file, _ := os.Open(filename)
-
-	// var img image.Image
-	// format := filepath.Ext(filename)
-	// switch format {
-	// case ".jpg", ".jpeg":
-	// 	img, _ = jpeg.Decode(file)
-	// case ".png":
-	// 	img, _ = png.Decode(file)
-	// }
 	name := "../../../test/" + filename
 
 	file, err := os.Open(name)
