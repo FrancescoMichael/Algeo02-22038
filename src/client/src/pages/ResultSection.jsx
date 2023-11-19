@@ -7,7 +7,7 @@ import axios from 'axios';
 import { getTextureData, getTextureDataExecutionTime } from '../services/datatexture.services';
 import ExecutionTimeColor from '../components/Layouts/ExecutionTimeColor';
 
-function ResultSection({pilihanAcuan}){
+function ResultSection({pilihanAcuan, cache}){
 
     const [currentPage, setCurrentPage] = useState(1);
 	const [postPerPage, setPostPerPage] = useState(6);
@@ -117,6 +117,9 @@ function ResultSection({pilihanAcuan}){
 	// 	})
 	// })
 
+	// cache pada color
+	
+
 	const lastPostIndex = currentPage * postPerPage;
 	const firstPostIndex = lastPostIndex - postPerPage;
 
@@ -128,6 +131,7 @@ function ResultSection({pilihanAcuan}){
 	const currentPostTexture = dataTextureResults.slice(firstPostIndex, lastPostIndex);
 
 	if(pilihanAcuan === 'color'){
+		
 		return (
 			<>
 				<div className = "justify-center">
@@ -158,30 +162,6 @@ function ResultSection({pilihanAcuan}){
 			</>
 		);
 	}
-    // return(
-    //     <>
-	// 	{/* {console.log("Pilihan acuannya adalah ", pilihanAcuan)} */}
-	// 	{/* {loading ? "loading" : 
-	// 		"done"
-	// 	} */}
-	// 		<div className = "bg-black">
-	// 			{executionTime.map((execTime,) => {
-	// 				return (
-	// 					<div key = {execTime.id}>
-	// 						{execTime.execution_time}
-	// 					</div>
-	// 				);
-	// 			})}
-	// 		</div>
-    //         <ResultList dataResults={currentPost}/>
-	// 		<Pagination 
-	// 			totalPosts = {dataResults.length} 
-	// 			postPerPage = {postPerPage}
-	// 			setCurrentPage={setCurrentPage}
-    //             currentPage={currentPage}
-	// 		/>
-    //     </>
-    // );
 }
 
 export default ResultSection; 

@@ -3,17 +3,15 @@ import ToggleButton from "../Elements/Toggle/ToggleButton";
 import Button from "../Elements/Button/Button";
 import { useForm } from "react-hook-form";
 
-function SumberData({ pilihanAcuan, setPilihanAcuan }) {
+function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
   const [imageToTest, setImageToTest] = useState(null);
   const [imageForDataset, setImageForDataset] = useState(null);
   const [urlForDataset, setUrlForDataset] = useState("");
   const [notification, setNotification] = useState("");
   const [uploadedFileName, setUploadedFileName] = useState("");
-  const [uploadedURLName, setUploadedURLName] = useState("");
   const [showContentAcuan, setShowContentAcuan] = useState(true);
   const [showContentDataset, setShowContentDataset] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [cache, setCache] = useState(false);
+  const [pilihanCache, setPilihanCache] = useState(false);
 
   const toggleContentAcuan = () => {
     setShowContentAcuan(!showContentAcuan);
@@ -24,11 +22,7 @@ function SumberData({ pilihanAcuan, setPilihanAcuan }) {
   };
 
   const toggleContentCache = () => {
-	if(urlForDataset == null || imageForDataset == null){
-		setNotification("Anda sebelumnya belum mengupload dataset");
-	}else{
-		setCache(true);
-	}
+    setPilihanCache(!setPilihanCache);
   };
 
 
@@ -36,12 +30,18 @@ function SumberData({ pilihanAcuan, setPilihanAcuan }) {
     console.log("test", imageToTest);
     console.log("imagedataset",imageForDataset);
     console.log("urldataset", urlForDataset);
-	console.log("acuan : ",showContentAcuan);
-	if(showContentAcuan){
-		setPilihanAcuan('color');
-	}else{
-		setPilihanAcuan('tekstur');
-	}
+    console.log("acuan : ",showContentAcuan);
+    if(showContentAcuan){
+      setPilihanAcuan('color');
+    }else{
+      setPilihanAcuan('tekstur');
+    }
+
+    if(!pilihanCache){
+      setCache(true);
+    }else{
+      setCache(false);
+    }
 
 	console.log("acuan : ", pilihanAcuan);
 	if (imageToTest && (imageForDataset || urlForDataset)) {
