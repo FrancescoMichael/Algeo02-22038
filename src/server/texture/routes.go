@@ -11,15 +11,15 @@ var executionTime time.Duration
 var startTime time.Time
 var endTime time.Time
 
-// func main() {
-// 	router := gin.Default()
+func main() {
+	router := gin.Default()
 
-// 	router.GET("/images", getSimilarImgs)
-// 	router.GET("/imagescache", getSimilarImgsCache)
-// 	router.GET("/executiontime", getExecutionTime)
+	router.GET("/images", getSimilarImgs)
+	router.GET("/imagescache", getSimilarImgsCache)
+	router.GET("/executiontime", getExecutionTime)
 
-// 	router.Run("localhost:8080")
-// }
+	router.Run("localhost:8080")
+}
 
 func getSimilarImgs(c *gin.Context) {
 	startTime = time.Now()
