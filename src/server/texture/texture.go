@@ -397,3 +397,8 @@ func loadImagesFromDir(path string, dirList []string) [][][][3]uint8 {
 	}
 	return rgbMatrices
 }
+
+func main() {
+	var a = imgToRGB("./imgDataset/0.jpg")
+	fmt.Println(a)
+}

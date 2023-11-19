@@ -79,7 +79,13 @@ def hsvToVector(arr):
             vector = np.concatenate([bin_h[0], bin_s[0], bin_v[0]], axis=0)
             vector = vector.reshape(-1)
             hasil.append(vector.tolist())
-    return hasil
+
+    hasil = np.average(hasil, axis=0) 
+    hasil2 = []
+    hasil2 = hasil.tolist()
+
+    
+    return hasil2
 
     # # version 3
     # hasil = []
@@ -111,12 +117,12 @@ def hsvToVector(arr):
 def cosineSimilarity(vector1,vector2):
     k = []
     sum = 0
-    for i in range(16):
-        # k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
-        sum += (np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
-    # print(k)
+    # for i in range(len(vector1)):
+    #     # k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+    #     sum += (np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+    # # print(k)
 
-    return sum/16 # return the average of cosine similarity, block 4x4
+    return(np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))) # return the average of cosine similarity, block 4x4
 
 def loadVectorData(path,dir_list):
     arr_vectors = []
@@ -139,7 +145,7 @@ def loadVectorData(path,dir_list):
 
 def distance1(vector1,vector2):
     sum = 0.0
-    for i in range(16):
+    for i in range(len(vector1)):
 
         h1_ = np.average(vector1[i])
         h2_ = np.average(vector2[i])
@@ -163,3 +169,8 @@ def split_to_16_parts(image):
     sub_matrices = np.squeeze(np.lib.stride_tricks.as_strided(image,view_shape,strides)[::sub_shape[0],::sub_shape[1],:])
     return sub_matrices
 
+
+
+# a = hsvToVector(matrixRGBtoHSV(imgToMatrix("../../test/0.jpg")))
+# b = hsvToVector(matrixRGBtoHSV(imgToMatrix("../../test/1.jpg")))
+# print(cosineSimilarity(a,b))
