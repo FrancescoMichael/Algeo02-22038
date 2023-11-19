@@ -252,17 +252,17 @@ def urlscraping():
     try:
         data = request.json
         url_for_dataset = data.get('urlForDataset')
-        dict_url = {"link" : url_for_dataset}
-        with open("link_url.json", "w") as outfile: 
-            json.dump(dict_url, outfile)
+        # dict_url = {"link" : url_for_dataset}
+        # with open("link_url.json", "w") as outfile: 
+        #     json.dump(dict_url, outfile)
 
         # Implementasi logika scraping URL di sini...
 
         return jsonify({"message": "URL data processed successfully"})
     except Exception as e:
-        data = request.json
-        rl_for_dataset = data.get('urlForDataset')
-        return jsonify({"error": str(url_for_dataset)})   
+        # data = request.json
+        # rl_for_dataset = data.get('urlForDataset')
+        return jsonify({"error":""})   
     # try:
     #     data = request.json
     #     url_for_dataset = data

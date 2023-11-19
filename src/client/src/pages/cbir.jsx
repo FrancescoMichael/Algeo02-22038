@@ -8,7 +8,9 @@ function Proses() {
   useEffect(() => {
     document.title = "Jaring";
   }, []);
+
   const [pilihanAcuan, setPilihanAcuan] = useState('color')
+  const [cache, setCache] = useState(false);
 
   return (
       <div class="bg">
@@ -21,10 +23,13 @@ function Proses() {
           <SumberData 
             setPilihanAcuan={setPilihanAcuan}
             pilihanAcuan = {pilihanAcuan}
+            setCache = {setCache}
+            cache = {cache}
           />
           <div className="flex-col justify-center px-20">
             <ResultSection 
               pilihanAcuan = {pilihanAcuan}
+              cache = {cache}
             />
           </div>
         </div>
