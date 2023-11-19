@@ -50,9 +50,16 @@ go get -u github.com/gin-contrib/cors
 go get -u github.com/gin-contrib/cors
 ```
 
+Make sure your Node.js version is appropriate. Try running node -v, if not found, it means your Node.js installation is not correct. Required version >15.0.0.
 Install the node_modules in `src/client` by running the command:
 ```
+cd src/client
 npm install
+```
+
+Install the python libraries by running the command:
+```
+pip install flask
 ```
 
 
