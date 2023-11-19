@@ -13,8 +13,7 @@ function HowtoUse(){
                 <ol>
                     <li class="cards">Siapkan citra yang ingin Anda gunakan sebagai citra uji dan citra pembanding</li>
                     <li class="cards">
-                        Unggah citra uji (.jpg atau .png) dan citra pembanding (.zip) Anda. Citra pembanding juga dapat diberikan dengan menyediakan 
-                        URL yang menuju suatu situs web. <i>Jaring</i> akan mengambil gambar-gambar dari situs tersebut.
+                        Unggah citra uji (.jpg atau .png) dan citra pembanding (.zip) Anda.
                     </li>
                     <li class="cards">Pilih apakah Anda ingin melakukan temu balik citra menggunakan CBIR berbasis warna atau tekstur</li>
                     <li class="cards"><i>Jaring</i> akan menampilkan citra yang memiliki kemiripan di atas 60% dengan citra uji</li>
