@@ -88,7 +88,7 @@ function SumberData({ pilihanAcuan, setPilihanAcuan }) {
     }
 
 	setUploadedFileName("");
-	setUploadedURLName("");
+	// setUploadedURLName("");
 	setUrlForDataset("");
 };
 
@@ -154,7 +154,7 @@ function SumberData({ pilihanAcuan, setPilihanAcuan }) {
               <NavigationUpload
                 type="url"
                 setUrlForDataset={setUrlForDataset}
-                setUploadedFileName={setUploadedURLName}
+                urlForDataset={urlForDataset}
               />
             )}
           </div>
