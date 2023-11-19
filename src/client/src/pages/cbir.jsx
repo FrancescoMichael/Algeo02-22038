@@ -6,12 +6,12 @@ import Navbar from "../components/Fragments/Navbar";
 
 function Proses() {
   useEffect(() => {
-    document.title = "Ini judul";
+    document.title = "Jaring";
   }, []);
   const [pilihanAcuan, setPilihanAcuan] = useState('color')
 
   return (
-      <>
+      <div class="bg">
         <Navbar />
         <div className="flex flex-col min-h-screen w-full text-white bg-blue-400">
           <div className="flex flex-wrap justify-center mt-20 font-bold text-5xl text-blue-600 bg-yellow-100">
@@ -28,7 +28,7 @@ function Proses() {
             />
           </div>
         </div>
-      </>
+      </div>
   );
 }
 
