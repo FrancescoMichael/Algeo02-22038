@@ -50,6 +50,11 @@ go get -u github.com/gin-contrib/cors
 go get -u github.com/gin-contrib/cors
 ```
 
+Install the node_modules in `src/client` by running the command:
+```
+npm install
+```
+
 
 ## Usage
 Run the command below in `src/client`:
