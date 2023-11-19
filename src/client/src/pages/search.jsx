@@ -1,6 +1,10 @@
+import Navbar from "../components/Fragments/Navbar";
+
 function PenjalasanSearchEngine(){
     return (
-        <div>Ini penjelasan singkat search engine</div>
+        <>
+            <Navbar />
+        </>
     );
 }
 

@@ -13,10 +13,12 @@ function CardResults(props){
 function Gambar(props){
     const { image } = props;
 
+
     return (
         <a href = "#">
             <img 
-            src = {image} 
+            src = {`./imgDataset/${image}`}
+            // src = {image}
             alt = "imageresult" 
             className = "p-5 rounded-t-lg h-60 w-full object-cover"></img>
         </a>

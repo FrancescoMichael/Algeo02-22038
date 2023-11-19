@@ -56,8 +56,12 @@ def upload_image():
                     image_for_dataset.save(zip_path)
                     unzip_file(zip_path, dataset_folder)
                 else:
-                    image_for_dataset_path = os.path.join(app.config['UPLOAD_DATASET'], 'image_for_dataset.png')
-                    image_for_dataset.save(image_for_dataset_path)
+                    multiple_files = request.files.getList('multiple_files')
+                    for file in multiple_files:
+                        if file:
+                            multiple_filename = os.path.join(app.config['UPLOAD_DATASET'], secure_filename(file.filename))
+                    # image_for_dataset_path = os.path.join(app.config['UPLOAD_DATASET'], 'image_for_dataset.png')
+                    # image_for_dataset.save(image_for_dataset_path)
             else:
                 return jsonify({"error": "No selected file for imageForDataset"}), 400
         else:

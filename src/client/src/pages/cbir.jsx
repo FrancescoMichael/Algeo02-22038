@@ -18,9 +18,9 @@ function Proses() {
           </div>
 
           <SumberData />
-          {/* <div className="flex justify-center px-20"> */}
-            {/* <ResultSection /> */}
-          {/* </div> */}
+          <div className="flex justify-center px-20">
+            <ResultSection />
+          </div>
         </div>
       </>
   );

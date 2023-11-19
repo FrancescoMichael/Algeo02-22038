@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import ResultList from '../components/Layouts/ResultList';
 import Pagination from '../components/Fragments/Pagination';
 import { getColorData, getColorDataExecutionTime } from '../services/datacolor.services';
+import axios from 'axios';
 
 function ResultSection(){
 
@@ -553,10 +554,11 @@ function ResultSection(){
 	// 	"percentage": "90.02%"
 	// }
 	// ]
-    const [currentPage, setCurrentPage] = useState(3);
-	const [postPerPage, setPostPerPage] = useState(8);
+    const [currentPage, setCurrentPage] = useState(1);
+	const [postPerPage, setPostPerPage] = useState(6);
 	const [dataResults, setDataResults] = useState([]);
 	const [executionTime, setExecutionTime] = useState([]);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
         getColorData((data) => {
@@ -564,18 +566,15 @@ function ResultSection(){
         });
     });
 
-	useEffect(() =>{
-		getColorDataExecutionTime((time) => {
-			setExecutionTime(time);
-		});
-	});
-
 	const lastPostIndex = currentPage * postPerPage;
 	const firstPostIndex = lastPostIndex - postPerPage;
 	const currentPost = dataResults.slice(firstPostIndex, lastPostIndex);
 
     return(
         <>
+		{/* {loading ? "loading" : 
+			"done"
+		} */}
 			<div className = "bg-black">
 				{executionTime.map((execTime,) => {
 					return (
