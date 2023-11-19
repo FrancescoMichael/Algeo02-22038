@@ -34,7 +34,6 @@ Within _Jaring_, you can compare an image with image datasets that you desire, w
 
 ## Features
 - CBIR (Color-Based and Texture-Based)
-- Image Scraping
 - File Caching
 
 
@@ -83,6 +82,12 @@ go run ./routes.go texture.go
 ```
 After running those three commands, open `localhost:3000` in your web browser to load the website.
 
+
+## Screenshots
+![Input Test Image](./img/27.png)
+![Input Dataset](./img/28.png)
+![Search](./img/29.png)
+![Result](./img/30.png)
 
 ## Room for Improvement
 Room for improvement:
