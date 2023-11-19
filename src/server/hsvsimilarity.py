@@ -80,12 +80,7 @@ def hsvToVector(arr):
             vector = vector.reshape(-1)
             hasil.append(vector.tolist())
 
-    hasil = np.average(hasil, axis=0) 
-    hasil2 = []
-    hasil2 = hasil.tolist()
-
-    
-    return hasil2
+    return hasil
 
     # # version 3
     # hasil = []
@@ -117,13 +112,13 @@ def hsvToVector(arr):
 def cosineSimilarity(vector1,vector2):
     k = []
     sum = 0
-    # for i in range(len(vector1)):
-    #     # k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
-    #     sum += (np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
-    # # print(k)
+    for i in range(len(vector1)):
+        # k.append(np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+        sum += (np.dot(vector1[i], vector2[i]) / (np.linalg.norm(vector1[i]) * np.linalg.norm(vector2[i])))
+    # print(k)
+    return sum/len(vector1)
 
-    return(np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))) # return the average of cosine similarity, block 4x4
-
+   
 def loadVectorData(path,dir_list):
     arr_vectors = []
     list_extension = ['jpg','jpeg','png']
