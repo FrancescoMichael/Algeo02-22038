@@ -196,6 +196,13 @@ def upload_image():
             shutil.rmtree("../client/public/imgDataset/" + i)
         elif (os.path.isfile("../client/public/imgDataset/" + i)):
             os.remove("../client/public/imgDataset/" + i)
+    list_dir2 = os.listdir("../client/public/imgUpload/")
+    for i in list_dir2:
+        if (os.path.isdir("../client/public/imgUpload/" + i)):
+            shutil.rmtree("../client/public/imgUpload/" + i)
+        elif (os.path.isfile("../client/public/imgUpload/" + i)):
+            os.remove("../client/public/imgUpload/" + i)
+
     try:
         ensure_upload_folder(app.config['UPLOAD_TEST'])
         ensure_upload_folder(app.config['UPLOAD_DATASET'])
