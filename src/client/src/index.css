@@ -6,3 +6,8 @@
 * {
     font-family: "Josefin Sans", serif;
 }
+
+.bg {
+    background: white;
+	padding: 45px 0 0 0;
+}

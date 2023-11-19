@@ -150,16 +150,17 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
             )} */}
           </div>
           <div className="flex flex-col md:flex-row md:space-x-8">
-            <div className="mt-2 md:w-1/2">
+          <p className="mb-2 mt-2 w-1/2">Pilih dataset :</p>
+            {/* <div className="mt-2 md:w-1/2">
               <p className="mb-2">Pilih dataset :</p>
               <ToggleButton
                 textKiri="Folder"
                 textKanan="URL"
                 onClick={toggleContentDataset}
               />
-            </div>
+            </div> */}
 
-            {showContentDataset ? (
+            {/* {showContentDataset ? (
               <NavigationUpload
                 type="folder"
                 setImageForDataset={setImageForDataset}
@@ -171,7 +172,12 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
                 setUrlForDataset={setUrlForDataset}
                 urlForDataset={urlForDataset}
               />
-            )}
+            )} */}
+             <NavigationUpload
+                type="folder"
+                setImageForDataset={setImageForDataset}
+                setUploadedFileName={setUploadedFileName}
+              />
           </div>
 
           <div className="mt-4">
@@ -207,64 +213,6 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
   );
 }
 
-// function NavigationUpload({
-//   type,
-//   setImageForDataset,
-//   setUrlForDataset,
-//   setUploadedFileName,
-// }) {
-//   const [fileInput, setFileInput] = useState(null);
-//   const [urlInput, setUrlInput] = useState("");
-//   const { control } = useForm();
-
-//   const handleFolderUpload = (e) => {
-// 	const files = e.target.files;
-  
-// 	for (let i = 0; i < files.length; i++) {
-// 	  const file = files[i];
-  
-// 	  // Lakukan sesuatu dengan setiap file (misalnya, upload ke server)
-// 	  console.log(`File ${i + 1}: ${file.name}`);
-// 	  console.log(`Path: ${file.webkitRelativePath}`);
-// 	}
-	
-//   };
-
-//   return (
-//     <div style={{ width: "300px" }}>
-//       {" "}
-//       {/* Set a fixed width */}
-//       <form>
-//         {type === "folder" ? (
-// 			<input
-// 				type="file"
-// 				onChange={(e) => {
-// 					setUploadedFileName(e.target.files.name)
-// 					setImageForDataset(e.target.files)
-// 				}}
-// 				name = "multiple_files"
-// 				id = "multiple_files"
-// 				webkitdirectory="true"
-// 				directory="true"
-// 				multiple
-// 			/>
-//         ) : (
-//           <div>
-//             {/* Adjust the styling for the URL input */}
-//             <input
-//               type="text"
-//               value={urlInput}
-//               onChange={(e) => setUrlForDataset(e.target.value)}
-//               placeholder="Enter URL"
-//               style={{ width: "90%", boxSizing: "border-box", padding: "8px" }}
-//             />
-//           </div>
-//         )}
-//       </form>
-//     </div>
-//   );
-// }
-
 
 function NavigationUpload({
 	type,
@@ -284,7 +232,7 @@ function NavigationUpload({
 	};
   
 	return (
-		<div className = "w-full">
+		<div className = "w-full mt-4">
 		{" "}
 		{/* Set a fixed width */}
 		<form>

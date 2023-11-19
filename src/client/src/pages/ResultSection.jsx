@@ -5,7 +5,6 @@ import Pagination from '../components/Fragments/Pagination';
 import { getColorData, getColorDataExecutionTime, getColorOldData } from '../services/datacolor.services';
 import axios from 'axios';
 import { getTextureData, getTextureDataExecutionTime, getTextureOldData } from '../services/datatexture.services';
-import ExecutionTimeColor from '../components/Layouts/ExecutionTimeColor';
 
 function ResultSection({pilihanAcuan, cache}){
 
