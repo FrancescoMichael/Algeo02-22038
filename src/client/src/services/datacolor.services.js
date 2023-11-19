@@ -13,13 +13,13 @@ export const getColorData = (callback) => {
     });
 }
 
-export const getColorOldData = () => {
+export const getColorOldData = (callback) => {
     // dataset lama
     axios
     .get("http://localhost:5000/data")
     .then((res) => {
         console.log(res.data)
-        // callback(res.data)
+        callback(res.data)
     })
     .catch((err) => {
         console.log(err);

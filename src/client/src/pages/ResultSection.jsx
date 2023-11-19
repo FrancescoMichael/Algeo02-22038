@@ -2,9 +2,9 @@ import CardResults from '../components/Fragments/CardResults';
 import { useState, useEffect } from 'react';
 import ResultList from '../components/Layouts/ResultList';
 import Pagination from '../components/Fragments/Pagination';
-import { getColorData, getColorDataExecutionTime } from '../services/datacolor.services';
+import { getColorData, getColorDataExecutionTime, getColorOldData } from '../services/datacolor.services';
 import axios from 'axios';
-import { getTextureData, getTextureDataExecutionTime } from '../services/datatexture.services';
+import { getTextureData, getTextureDataExecutionTime, getTextureOldData } from '../services/datatexture.services';
 import ExecutionTimeColor from '../components/Layouts/ExecutionTimeColor';
 
 function ResultSection({pilihanAcuan, cache}){
@@ -18,7 +18,9 @@ function ResultSection({pilihanAcuan, cache}){
 
 	// array hasil
 	const [dataColorResults, setDataColorResults] = useState([]);
+	const [dataColorOldResults, setDataColorOldResults] = useState([]);
 	const [dataTextureResults, setDataTextureResults] = useState([]);
+	const [dataTextureOldResults, setDataTextureOldResults] = useState([]);
 
 	// ambil data color
 	// useEffect(() => {
@@ -118,49 +120,122 @@ function ResultSection({pilihanAcuan, cache}){
 	// })
 
 	// cache pada color
-	
+	useEffect(() => {
+		const fetchData = () => {
+			// Periksa apakah dokumen sudah terload
+			if (document.readyState === 'complete') {
+				getColorOldData((data) => {
+					setDataColorOldResults(data);
+			});
+			}
+		};
+		fetchData()
+		const intervalId = setInterval(() => {
+			fetchData();
+		  }, 1000); // Adjust the interval as needed
+	  
+		  // Bersihkan interval saat komponen dibongkar
+		return () => clearInterval(intervalId);
+	}, []);
+
+	// cache pada texture
+	useEffect(() => {
+		const fetchData = () => {
+			// Periksa apakah dokumen sudah terload
+			if (document.readyState === 'complete') {
+				getTextureOldData((data) => {
+					setDataTextureOldResults(data);
+			});
+			}
+		};
+		fetchData()
+		const intervalId = setInterval(() => {
+			fetchData();
+		  }, 1000); // Adjust the interval as needed
+	  
+		  // Bersihkan interval saat komponen dibongkar
+		return () => clearInterval(intervalId);
+	}, []);
+
 
 	const lastPostIndex = currentPage * postPerPage;
 	const firstPostIndex = lastPostIndex - postPerPage;
 
 	// untuk warna
-	const currentPost = dataResults.slice(firstPostIndex, lastPostIndex);
 	const currentPostColor = dataColorResults.slice(firstPostIndex, lastPostIndex);
+	const currentPostOldColor = dataColorOldResults.slice(firstPostIndex, lastPostIndex);
 
 	// untuk texture
+	// const [dataTextureOldResults, setDataTextureOldResults] = useState([]);
 	const currentPostTexture = dataTextureResults.slice(firstPostIndex, lastPostIndex);
+	const currentPostOldTexture = dataTextureOldResults.slice(firstPostIndex, lastPostIndex);
 
 	if(pilihanAcuan === 'color'){
-		
-		return (
-			<>
-				<div className = "justify-center">
-					{`${dataColorResults.length} results in ${executionTimeColor.execution_time}`}
-				</div>
-				<ResultList dataResults={currentPostColor}/>
-				<Pagination 
-					totalPosts = {dataColorResults.length} 
-					postPerPage = {postPerPage}
-					setCurrentPage={setCurrentPage}
-					currentPage={currentPage}
-				/>
-			</>
-		);
+		if(cache){
+			//const [dataColorOldResults, setDataColorOldResults] = useState([]);
+			return (
+				<>
+					<div className = "justify-center">
+						{`${dataColorOldResults.length} results in ${executionTimeColor.execution_time}`}
+					</div>
+					<ResultList dataResults={currentPostOldColor}/>
+					<Pagination 
+						totalPosts = {dataColorOldResults.length} 
+						postPerPage = {postPerPage}
+						setCurrentPage={setCurrentPage}
+						currentPage={currentPage}
+					/>
+				</>
+			);
+		}else{
+			return (
+				<>
+					<div className = "justify-center">
+						{`${dataColorResults.length} results in ${executionTimeColor.execution_time}`}
+					</div>
+					<ResultList dataResults={currentPostColor}/>
+					<Pagination 
+						totalPosts = {dataColorResults.length} 
+						postPerPage = {postPerPage}
+						setCurrentPage={setCurrentPage}
+						currentPage={currentPage}
+					/>
+				</>
+			);
+		}
+	// texture const [dataTextureOldResults, setDataTextureOldResults] = useState([]);
 	}else{
-		return (
-			<>
-			<div className = "justify-center">
-	 			{`${dataTextureResults.length} results in ${executionTimeTexture.executiontime}`}
-			</div>
-				<ResultList dataResults={currentPostTexture}/>
-				<Pagination 
-					totalPosts = {dataTextureResults.length} 
-					postPerPage = {postPerPage}
-					setCurrentPage={setCurrentPage}
-					currentPage={currentPage}
-				/>
-			</>
-		);
+		if(cache){
+			return (
+				<>
+				<div className = "justify-center">
+					 {`${dataTextureOldResults.length} results in ${executionTimeTexture.executiontime}`}
+				</div>
+					<ResultList dataResults={currentPostOldTexture}/>
+					<Pagination 
+						totalPosts = {dataTextureOldResults.length} 
+						postPerPage = {postPerPage}
+						setCurrentPage={setCurrentPage}
+						currentPage={currentPage}
+					/>
+				</>
+			);
+		}else{
+			return (
+				<>
+				<div className = "justify-center">
+					 {`${dataTextureResults.length} results in ${executionTimeTexture.executiontime}`}
+				</div>
+					<ResultList dataResults={currentPostTexture}/>
+					<Pagination 
+						totalPosts = {dataTextureResults.length} 
+						postPerPage = {postPerPage}
+						setCurrentPage={setCurrentPage}
+						currentPage={currentPage}
+					/>
+				</>
+			);
+		}
 	}
 }
 

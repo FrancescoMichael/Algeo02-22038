@@ -44,7 +44,8 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
     }
 
 	console.log("acuan : ", pilihanAcuan);
-	if (imageToTest && (imageForDataset || urlForDataset)) {
+  console.log("apakah cache?", cache);
+	if (imageToTest && (imageForDataset || urlForDataset || !cache)) {
 		const formData = new FormData();
 		formData.append("imageToTest", imageToTest);
 
@@ -70,17 +71,31 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
 			return;
 		}
 
-		try {
-			const response = await fetch("http://localhost:5000/upload", {
-				method: "POST",
-				body: formData,
-			});
+    try {
+      const response = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-			const result = await response.json();
-			console.log(result);
-		} catch (error) {
-			console.error("Error running algorithm:", error);
-		}
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Error running algorithm:", error);
+    }
+
+    if(!cache){
+      try {
+        const response = await fetch("http://localhost:5000/uploaddataset", {
+          method: "POST",
+          body: formData,
+        });
+  
+        const result = await response.json();
+        console.log(result);
+      } catch (error) {
+        console.error("Error running algorithm:", error);
+      }
+    }
     } else {
       setNotification(
         "Please upload both images before running the algorithm."

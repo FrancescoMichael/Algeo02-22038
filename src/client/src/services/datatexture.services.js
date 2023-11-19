@@ -13,13 +13,13 @@ export const getTextureData = (callback) => {
     });
 }
 
-export const getTextureOldData = () => {
+export const getTextureOldData = (callback) => {
     // dataset lama
     axios
     .get("http://localhost:8080/imagescache")
     .then((res) => {
         console.log(res.data)
-        // callback(res.data)
+        callback(res.data)
     })
     .catch((err) => {
         console.log(err);

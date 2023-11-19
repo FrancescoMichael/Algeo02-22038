@@ -187,25 +187,56 @@ def execution():
 
     return execution_time   
     
-
-@app.route('/upload', methods=['POST'])
-def upload_image():
+@app.route('/uploaddataset', methods = ['POST'])
+def uploaddataset():
     list_dir = os.listdir("../client/public/imgDataset/")
     for i in list_dir:
         if (os.path.isdir("../client/public/imgDataset/" + i)):
             shutil.rmtree("../client/public/imgDataset/" + i)
         elif (os.path.isfile("../client/public/imgDataset/" + i)):
             os.remove("../client/public/imgDataset/" + i)
+    ensure_upload_folder(app.config['UPLOAD_DATASET'])
+
+    if 'imageForDataset' in request.files:
+        image_for_dataset = request.files['imageForDataset']
+        if image_for_dataset.filename != '':
+            # Memeriksa apakah file dataset adalah zip
+            if image_for_dataset.filename.endswith('.zip'):
+                dataset_folder = os.path.join(app.config['UPLOAD_DATASET'])
+                ensure_upload_folder(dataset_folder)
+                zip_path = os.path.join(dataset_folder, 'dataset.zip')
+                image_for_dataset.save(zip_path)
+                unzip_file(zip_path, dataset_folder)
+            else:
+                multiple_files = request.files.getList('imageForDataset')
+                for file in multiple_files:
+                    if file:
+                        multiple_filename = os.path.join(app.config['UPLOAD_DATASET'], file.filename)
+                        multiple_files.save(multiple_filename)
+                    else:
+                        return jsonify({"error": "No selected file for imageForDataset"}), 400
+    else:
+        image_for_dataset_path = None
+
+@app.route('/upload', methods=['POST'])
+def upload_image():
+    # list_dir = os.listdir("../client/public/imgDataset/")
+    # for i in list_dir:
+    #     if (os.path.isdir("../client/public/imgDataset/" + i)):
+    #         shutil.rmtree("../client/public/imgDataset/" + i)
+    #     elif (os.path.isfile("../client/public/imgDataset/" + i)):
+    #         os.remove("../client/public/imgDataset/" + i)
     list_dir2 = os.listdir("../client/public/imgUpload/")
     for i in list_dir2:
         if (os.path.isdir("../client/public/imgUpload/" + i)):
             shutil.rmtree("../client/public/imgUpload/" + i)
         elif (os.path.isfile("../client/public/imgUpload/" + i)):
             os.remove("../client/public/imgUpload/" + i)
+        
 
     try:
         ensure_upload_folder(app.config['UPLOAD_TEST'])
-        ensure_upload_folder(app.config['UPLOAD_DATASET'])
+        
 
         # Mengecek apakah 'imageToTest' dan 'imageForDataset' ada dalam request.files
         if 'imageToTest' in request.files:
@@ -217,28 +248,32 @@ def upload_image():
                 return jsonify({"error": "No selected file for imageToTest"}), 400
         else:
             image_to_test_path = None
+        #     else:
+        #         return jsonify({"error": "No selected file for imageForDataset"}), 400
+        # else:
+        #     image_for_dataset_path = None
 
-        if 'imageForDataset' in request.files:
-            image_for_dataset = request.files['imageForDataset']
-            if image_for_dataset.filename != '':
-                # Memeriksa apakah file dataset adalah zip
-                if image_for_dataset.filename.endswith('.zip'):
-                    dataset_folder = os.path.join(app.config['UPLOAD_DATASET'])
-                    ensure_upload_folder(dataset_folder)
-                    zip_path = os.path.join(dataset_folder, 'dataset.zip')
-                    image_for_dataset.save(zip_path)
-                    unzip_file(zip_path, dataset_folder)
-                else:
-                    multiple_files = request.files.getList('imageForDataset')
-                    for file in multiple_files:
-                        if file:
-                            multiple_filename = os.path.join(app.config['UPLOAD_DATASET'], file.filename)
-                            multiple_files.save(multiple_filename)
+        # if 'imageForDataset' in request.files:
+        #     image_for_dataset = request.files['imageForDataset']
+        #     if image_for_dataset.filename != '':
+        #         # Memeriksa apakah file dataset adalah zip
+        #         if image_for_dataset.filename.endswith('.zip'):
+        #             dataset_folder = os.path.join(app.config['UPLOAD_DATASET'])
+        #             ensure_upload_folder(dataset_folder)
+        #             zip_path = os.path.join(dataset_folder, 'dataset.zip')
+        #             image_for_dataset.save(zip_path)
+        #             unzip_file(zip_path, dataset_folder)
+        #         else:
+        #             multiple_files = request.files.getList('imageForDataset')
+        #             for file in multiple_files:
+        #                 if file:
+        #                     multiple_filename = os.path.join(app.config['UPLOAD_DATASET'], file.filename)
+        #                     multiple_files.save(multiple_filename)
                             
-            else:
-                return jsonify({"error": "No selected file for imageForDataset"}), 400
-        else:
-            image_for_dataset_path = None
+            # else:
+            #     return jsonify({"error": "No selected file for imageForDataset"}), 400
+        # else:
+        #     image_for_dataset_path = None
 
         # Add your logic for image processing using Flask here
         # ...
