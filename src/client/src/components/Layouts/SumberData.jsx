@@ -66,7 +66,7 @@ function SumberData({ pilihanAcuan, setPilihanAcuan }) {
 				console.error("Error sending URL data to /urlscraping:", error);
 			}
 
-			setUrlForDataset("");
+			// setUrlForDataset("");
 			return;
 		}
 

@@ -26,13 +26,13 @@ export const getColorOldData = () => {
     });
 }
 
-export const getColorDataExecutionTime = () => {
+export const getColorDataExecutionTime = (callback) => {
     // execution time
     axios
     .get("http://localhost:5000/execution_time")
     .then((res) => {
         console.log(res.data)
-        // callback(res.data)
+        callback(res.data)
     })
     .catch((err) => {
         console.log(err);

@@ -180,10 +180,10 @@ def data():
 def execution():
     result = str(total_result) + " Results in "
     if (time_length < 60):
-        execution_time = {'id':'1','execution_time':result + str(round(time_length,2))+" seconds"}
+        execution_time = {'id':'1','execution_time':str(round(time_length,2))+" seconds"}
     else:
         convert = time.strftime("%M.%S",time.gmtime(time_length))
-        execution_time = {'id':'1','execution_time': result + convert +" Minutes"}
+        execution_time = {'id':'1','execution_time': convert +" Minutes"}
 
     return execution_time   
     
@@ -247,8 +247,8 @@ def upload_image():
     except Exception as e:
         return jsonify({"error": str(e)})
     
-@app.route('/urlscraping', methods=['POST'])
-def url_scraping():
+@app.route('/urlscraping', methods=['POST','GET'])
+def urlscraping():
     try:
         data = request.json
         url_for_dataset = data.get('urlForDataset')
@@ -257,7 +257,15 @@ def url_scraping():
 
         return jsonify({"message": "URL data processed successfully"})
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(url_for_dataset)})   
+    # try:
+    #     data = request.json
+    #     url_for_dataset = data
 
+    #     # Implementasi logika scraping URL di sini...
+
+    #     return jsonify({"message": "URL data processed successfully"})
+    # except Exception as e:
+    #     return jsonify({"error": str(e)})
 if __name__ == '__main__':
     app.run(debug = True)
