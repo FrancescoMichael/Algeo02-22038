@@ -12,7 +12,7 @@ function Services () {
             </div>
             <div class="profiles">
                 <div class="team-item">
-                    <img src="src/assets/anonymous.png" class="team-img" alt="Marvel" />                   
+                    <img src="src/assets/Cesco.jpg" class="team-img" alt="Marvel" />                   
                     <h3>FRANCESCO MICHAEL KUSUMA</h3>            
                     <div class="team-identity"><p>IF'22 - Institut Teknologi Bandung<br></br><i>13522038</i></p></div>
                     <ul class="team-icon">
@@ -21,7 +21,7 @@ function Services () {
                 </div> 
 
                 <div class="team-item">
-                    <img src="src/assets/anonymous.png" class="team-img" alt="Francesco" />
+                    <img src="src/assets/Marvel.jpg" class="team-img" alt="Francesco" />
                     <h3>MARVEL PANGONDIAN</h3>
                     <div class="team-identity"><p>IF'22 - Institut Teknologi Bandung<br></br><i>13522075</i></p></div>
                     <ul class="team-icon">

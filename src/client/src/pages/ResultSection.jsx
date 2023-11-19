@@ -5,7 +5,6 @@ import Pagination from '../components/Fragments/Pagination';
 import { getColorData, getColorDataExecutionTime } from '../services/datacolor.services';
 import axios from 'axios';
 import { getTextureData, getTextureDataExecutionTime } from '../services/datatexture.services';
-import ExecutionTimeColor from '../components/Layouts/ExecutionTimeColor';
 
 function ResultSection({pilihanAcuan, cache}){
 
@@ -134,7 +133,7 @@ function ResultSection({pilihanAcuan, cache}){
 		
 		return (
 			<>
-				<div className = "justify-center">
+				<div className = "flex items-center justify-center">
 					{`${dataColorResults.length} results in ${executionTimeColor.execution_time}`}
 				</div>
 				<ResultList dataResults={currentPostColor}/>
@@ -149,7 +148,7 @@ function ResultSection({pilihanAcuan, cache}){
 	}else{
 		return (
 			<>
-			<div className = "justify-center">
+			<div className = "flex items-center">
 	 			{`${dataTextureResults.length} results in ${executionTimeTexture.executiontime}`}
 			</div>
 				<ResultList dataResults={currentPostTexture}/>
