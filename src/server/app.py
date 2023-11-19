@@ -204,7 +204,7 @@ def upload_image():
         if 'imageToTest' in request.files:
             image_to_test = request.files['imageToTest']
             if image_to_test.filename != '':
-                image_to_test_path = os.path.join(app.config['UPLOAD_TEST'], 'image_to_test.png')
+                image_to_test_path = os.path.join(app.config['UPLOAD_TEST'], image_to_test.filename)
                 image_to_test.save(image_to_test_path)
             else:
                 return jsonify({"error": "No selected file for imageToTest"}), 400
