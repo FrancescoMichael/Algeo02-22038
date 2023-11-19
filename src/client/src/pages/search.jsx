@@ -4,6 +4,7 @@ function PenjalasanSearchEngine(){
     return (
         <>
             <Navbar />
+            <p className="text-center">test</p>
         </>
     );
 }

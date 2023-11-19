@@ -19,7 +19,7 @@
 //                             <div className = "team-item">
 //                                 <img src = "https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg" className = "team-img" alt = "pic"/>
 //                                 <h3>Francesco Michael</h3>
-//                                 <div className = "team-info">
+//                                 <div className = "team-nim">
 //                                     <p>Kerja bagian ...</p>
 //                                     <p>Ini deskripsi</p>
 //                                     {/* <ul className = "team-icon">
@@ -36,7 +36,7 @@
 //                             <div className = "team-item">
 //                                 <img src = "https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg" className = "team-img" alt = "pic"/>
 //                                 <h3>Francesco Michael</h3>
-//                                 <div className = "team-info">
+//                                 <div className = "team-nim">
 //                                     <p>Kerja bagian ...</p>
 //                                     <p>Ini deskripsi</p>
 //                                     {/* <ul className = "team-icon">
@@ -53,7 +53,7 @@
 //                             <div className = "team-item">
 //                                 <img src = "https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg" className = "team-img" alt = "pic"/>
 //                                 <h3>Francesco Michael</h3>
-//                                 <div className = "team-info">
+//                                 <div className = "team-nim">
 //                                     <p>Kerja bagian ...</p>
 //                                     <p>Ini deskripsi</p>
 //                                     {/* <ul className = "team-icon">
@@ -96,7 +96,7 @@
 //                             <div className = "team-item">
 //                                 <img src = "https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg" className = "team-img" alt = "pic"/>
 //                                 <h3 className = "mt-20 mb-1 text-gray-700 text-lg font-bold uppercase transition duration-250 ease-in-out hover:text-blue-500">Francesco Michael</h3>
-//                                 <div className = "team-info">
+//                                 <div className = "team-nim">
 //                                     <p>Kerja bagian ...</p>
 //                                     <p>Ini deskripsi</p>
 //                                     {/* <ul className = "team-icon">
@@ -113,7 +113,7 @@
 //                             <div className = "team-item">
 //                                 <img src = "https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg" className = "team-img" alt = "pic"/>
 //                                 <h3>Francesco Michael</h3>
-//                                 <div className = "team-info">
+//                                 <div className = "team-nim">
 //                                     <p>Kerja bagian ...</p>
 //                                     <p>Ini deskripsi</p>
 //                                     {/* <ul className = "team-icon">
@@ -130,7 +130,7 @@
 //                             <div className = "team-item">
 //                                 <img src = "https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg" className = "team-img" alt = "pic"/>
 //                                 <h3>Francesco Michael</h3>
-//                                 <div className = "team-info">
+//                                 <div className = "team-nim">
 //                                     <p>Kerja bagian ...</p>
 //                                     <p>Ini deskripsi</p>
 //                                     {/* <ul className = "team-icon">
