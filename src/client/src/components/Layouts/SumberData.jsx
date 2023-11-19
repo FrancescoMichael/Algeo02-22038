@@ -3,7 +3,7 @@ import ToggleButton from "../Elements/Toggle/ToggleButton";
 import Button from "../Elements/Button/Button";
 import { useForm } from "react-hook-form";
 
-function SumberData() {
+function SumberData({ pilihanAcuan, setPilihanAcuan }) {
   const [imageToTest, setImageToTest] = useState(null);
   const [imageForDataset, setImageForDataset] = useState(null);
   const [urlForDataset, setUrlForDataset] = useState("");
@@ -36,6 +36,14 @@ function SumberData() {
     console.log("test", imageToTest);
     console.log("imagedataset",imageForDataset);
     console.log("urldataset", urlForDataset);
+	console.log("acuan : ",showContentAcuan);
+	if(showContentAcuan){
+		setPilihanAcuan('color');
+	}else{
+		setPilihanAcuan('tekstur');
+	}
+
+	console.log("acuan : ", pilihanAcuan);
 	if (imageToTest && (imageForDataset || urlForDataset)) {
 		const formData = new FormData();
 		formData.append("imageToTest", imageToTest);
@@ -120,11 +128,11 @@ function SumberData() {
               onClick={toggleContentCache}
             />
 
-            {cache ? (
+            {/* {cache ? (
               <NavigationProcess type="color" />
             ) : (
               <NavigationProcess type="tekstur" />
-            )}
+            )} */}
           </div>
           <div className="flex flex-col md:flex-row md:space-x-8">
             <div className="mt-2 md:w-1/2">
@@ -160,11 +168,11 @@ function SumberData() {
               onClick={toggleContentAcuan}
             />
 
-            {showContentAcuan ? (
+            {/* {showContentAcuan ? (
               <NavigationProcess type="color" />
             ) : (
               <NavigationProcess type="tekstur" />
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -289,14 +297,14 @@ function NavigationUpload({
 			</form>
 		</div>
 	);
-  }
-
-function NavigationProcess({ type }) {
-  return (
-    <div>
-      {type === "color" ? <div>Proses warna</div> : <div>Proses tekstur</div>}
-    </div>
-  );
 }
+
+// function NavigationProcess({ type }) {
+//   return (
+//     <div>
+//       {type === "color" ? setPilihanAcuan() : <div>Proses tekstur</div>}
+//     </div>
+//   );
+// }
 
 export default SumberData;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const textureData = () => {
+export const getTextureData = () => {
     // dataset baru
     axios
     .get("http://localhost:8080/images")

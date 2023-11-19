@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useState } from "react";
 import "../index.css";
 import SumberData from "../components/Layouts/SumberData";
 import ResultSection from "./ResultSection";
@@ -8,6 +8,7 @@ function Proses() {
   useEffect(() => {
     document.title = "Ini judul";
   }, []);
+  const [pilihanAcuan, setPilihanAcuan] = useState('color')
 
   return (
       <>
@@ -17,9 +18,14 @@ function Proses() {
             Reverse Image Search
           </div>
 
-          <SumberData />
-          <div className="flex justify-center px-20">
-            <ResultSection />
+          <SumberData 
+            setPilihanAcuan={setPilihanAcuan}
+            pilihanAcuan = {pilihanAcuan}
+          />
+          <div className="flex-col justify-center px-20">
+            <ResultSection 
+              pilihanAcuan = {pilihanAcuan}
+            />
           </div>
         </div>
       </>
