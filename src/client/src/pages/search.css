@@ -1,0 +1,43 @@
+.section-ttl {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.section-bg {
+	background: white;
+	padding: 120px 0 0 0;
+}
+
+.cont {
+    font-size: 18px;
+}
+
+.sub h3 {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.card {
+    margin: 40px 40px 20px;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#CBIR {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#umum {
+    background-color: #F1EFEF;
+}
+
+.sub {
+    margin: 10px 40px 0;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #FBF7F0;
+}

@@ -1,0 +1,25 @@
+.section-bgr {
+	background: white;
+	padding: 120px 0 0;
+}
+
+.section-tit {
+    font-size: 40px;
+	font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.ol {
+    display: flex;
+    flex-direction: column;
+}
+
+.cards {
+    justify-content: center;
+    font-size: larger;
+    margin: 20px 40px 0;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #FBF7F0;
+}
