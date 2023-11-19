@@ -38,16 +38,33 @@ Within _Jaring_, you can compare an image with image datasets that you desire, w
 - File Caching
 
 
-## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
-
-
 ## Setup
+Make sure your Golang version is appropriate. Try running `go version`, if not found, it means your Golang installation is not correct. Required version 1.21.4.
 Install dependencies in `src/server/texture` by running the commands below:
 ```
 go get -u github.com/gin-contrib/cors
 go get -u github.com/gin-contrib/cors
+```
+
+Make sure your Node.js version is appropriate. Try running `node -v`, if not found, it means your Node.js installation is not correct. Required version >15.0.0.
+Install the node_modules in `src/client` by running the command:
+```
+cd src/client
+npm install
+```
+
+Make sure your Python is appropriate. Try running `py --v`, if not found, it means your Python installation is not correct. Required version >=3.0.
+Install the python libraries by running the command:
+```
+pip install flask
+pip install numpy
+pip install zipfile
+pip install matplotlib
+pip install flask-cors
+pip install requests
+pip install jsonify
+pip install shutil
+pip install opencv-python
 ```
 
 

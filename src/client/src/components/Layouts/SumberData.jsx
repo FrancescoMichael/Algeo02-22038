@@ -109,7 +109,7 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
 
   return (
     <>
-      <div className="w-full h-full container p-5 ml-10 mr-20 mt-10 mb-10 flex bg-red-100">
+      <div className="w-full h-full container p-5 ml-10 mr-10 mt-10 mb-10 flex bg-red-100">
         <div className="w-1/2 mr-10 bg-black w-full justify-center">
           <div className="font-bold text-xl flex justify-center mb-5">
               TEST IMAGE
@@ -130,7 +130,7 @@ function SumberData({ pilihanAcuan, setPilihanAcuan, cache, setCache }) {
           </div>
         </div>
 
-        <div className="w-1/2 ml-20 bg-green-400 w-full">
+        <div className="w-1/2 ml-0 bg-green-400 w-full">
           <div className="font-bold text-xl flex justify-center mb-5">
             DATASET
           </div>
@@ -302,7 +302,9 @@ function NavigationUpload({
 				<input
 					type="text"
 					value = {urlInput}
-					onChange={(e) => setUrlForDataset(e.target.value)}
+					onChange={(e) => {
+            setUrlInput(e.target.value);
+            setUrlForDataset(e.target.value);}}
 					placeholder = "Enter URL"
 					className = "text-sm border rounded w-full py-2 px-3 text-slate-700 placeholder: opacity-50"
 					name = "url"
